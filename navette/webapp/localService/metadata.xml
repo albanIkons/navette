@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZNAVETTE_SRV" xml:lang="it" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="update_navetta" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="NAVNUM"/>
+                </Key>
+                <Property Name="NAVNUM" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Numero navetta" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="MESSAGE" Type="Edm.String" Nullable="false" MaxLength="100" sap:unicode="false" sap:label="Messaggio" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="get_matnr" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="MATNR"/>
+                    <PropertyRef Name="MAKTX"/>
+                </Key>
+                <Property Name="MATNR" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Materiale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MAKTX" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Descrizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="get_aufnr" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="AUFNR"/>
+                </Key>
+                <Property Name="AUFNR" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Ordine di produzione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="get_Arbpl" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ARBPL"/>
+                </Key>
+                <Property Name="ARBPL" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Centro di lavoro" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="KTEXT" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Descrizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="get_lgort" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="LGORT"/>
+                </Key>
+                <Property Name="LGORT" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Magazzino" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="LGOBE" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Descrizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="create_navetta" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="NAVNUM"/>
+                </Key>
+                <Property Name="NAVNUM" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Navetta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="get_wipdata" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="NAVNUM"/>
+                    <PropertyRef Name="WIP_OUT"/>
+                </Key>
+                <Property Name="NAVNUM" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Navetta" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="WIP_OUT" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Wip-out" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="LGORT" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Magazzino" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="AUFNR" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Ordine di produzione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MATNR" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Materiale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MAKTX" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Descrizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ICONA_COLORE" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Icona colore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="STATO_COLORE" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Stato colore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ICONA_COLLAUDO" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Icona collaudo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="STATO_COLLAUDO" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Stato collaudo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ARBPL" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Centro di lavoro" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MENGE" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:label="Qta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MEINS" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Uom" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MESSAGE" Type="Edm.String" Nullable="false" MaxLength="100" sap:unicode="false" sap:label="Messaggi" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="get_wip" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="WIP_OUT"/>
+                </Key>
+                <Property Name="WIP_OUT" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Wip out" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="save_navetta" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Navnum"/>
+                    <PropertyRef Name="ZwipOut"/>
+                </Key>
+                <Property Name="Navnum" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Numero navetta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZwipOut" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Unità WIP OUT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Aufnr" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Ordine" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Lgort" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Magazzino" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Umlgo" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Mag. di dest." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Materiale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Maktx" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Descrizione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IconaColore" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato colore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ZzccStato" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="St.Ctrl Colore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IconaCollaudo" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato collaudo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Zzcollaudo" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Collaudo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Arbpl" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Centro di lav." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Menge" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3" sap:unicode="false" sap:unit="Meins" sap:label="Quantità" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Meins" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unità mis. base" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Ernam" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Creato da" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Erdat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Data cr." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Condat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Data conferma navett" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Message" Type="Edm.String" Nullable="false" MaxLength="100" sap:unicode="false" sap:label="Campo carattere a 100 posizioni" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="trasf_navetta" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="NAVNUM"/>
+                </Key>
+                <Property Name="NAVNUM" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Numero navetta" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="MESSAGE" Type="Edm.String" Nullable="false" MaxLength="100" sap:unicode="false" sap:label="Messaggio" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityContainer Name="ZNAVETTE_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="update_navettaSet" EntityType="ZNAVETTE_SRV.update_navetta" sap:creatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="get_matnrSet" EntityType="ZNAVETTE_SRV.get_matnr" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="get_aufnrSet" EntityType="ZNAVETTE_SRV.get_aufnr" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="get_ArbplSet" EntityType="ZNAVETTE_SRV.get_Arbpl" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="get_lgortSet" EntityType="ZNAVETTE_SRV.get_lgort" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="create_navettaSet" EntityType="ZNAVETTE_SRV.create_navetta" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="get_wipdataSet" EntityType="ZNAVETTE_SRV.get_wipdata" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="get_wipSet" EntityType="ZNAVETTE_SRV.get_wip" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="save_navettaSet" EntityType="ZNAVETTE_SRV.save_navetta" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="trasf_navettaSet" EntityType="ZNAVETTE_SRV.trasf_navetta" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <atom:link rel="self" href="http://srvvlxdev.vulcaflex.locale:8000/sap/opu/odata/sap/ZNAVETTE_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://srvvlxdev.vulcaflex.locale:8000/sap/opu/odata/sap/ZNAVETTE_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
