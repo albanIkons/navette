@@ -1,16 +1,32 @@
-<mvc:View
-    controllerName="npmnavette.navette.controller.Home"
-    xmlns:mvc="sap.ui.core.mvc"
-    displayBlock="true"
-    xmlns="sap.m"
->
+<mvc:View controllerName="npmnavette.navette.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:f="sap.f">
     <Shell id="shell">
-        <App id="app">
-            <pages>
+        <!-- <App id="app"> -->
+            <!-- <pages> -->
                 <Page id="page" title="{i18n>title}">
-                    <content />
+                    <content>
+                        <IconTabBar id="iconTabBar" expanded="true" class="sapUiResponsiveContentPadding" select="onIconTabBarSelect" >
+                            <items>
+                                <IconTabFilter icon="sap-icon://create" key="warehouse" iconColor="Negative" text="{i18n>creazioneNavette}">
+                                    <!--Create navette content goes here-->
+                                    <core:Fragment fragmentName="npmnavette.navette.fragments.createNavette" type="XML" />
+                                </IconTabFilter>
+
+                                <IconTabSeparator icon="sap-icon://process" />
+
+                                <IconTabFilter icon="sap-icon://expand-group" key="specialStock" iconColor="Critical" text="{i18n>transferNavette}">
+                                    <!--Transfer navette content goes here-->
+                                </IconTabFilter>
+
+                                <IconTabSeparator icon="sap-icon://process" />
+
+                                <IconTabFilter icon="sap-icon://accept" id="iconTabPicture" iconColor="Positive" text="{i18n>riceviNavette}">
+                                    <!--Receive navette content goes here-->
+                                </IconTabFilter>
+                            </items>
+                        </IconTabBar>
+                    </content>
                 </Page>
-            </pages>
-        </App>
+            <!-- </pages> -->
+        <!-- </App> -->
     </Shell>
 </mvc:View>
