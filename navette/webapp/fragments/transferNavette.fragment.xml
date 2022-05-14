@@ -1,0 +1,27 @@
+<core:FragmentDefinition xmlns="sap.m" 
+                        xmlns:f="sap.f"
+                        xmlns:l="sap.ui.layout" 
+                        xmlns:core="sap.ui.core"
+                        xmlns:form="sap.ui.layout.form" 
+                        height="100%">
+
+    <form:SimpleForm busy="{mainModel>/trasferBusy}"
+                     columnsXL="3"
+                     columnsL="2"  
+                     columnsM="1" 
+                     layout="ColumnLayout" 
+                     labelSpanXL="3"
+                     labelSpanL="3"
+                     labelSpan="3">
+        <form:toolbar>
+            <Toolbar >
+                <Title text="{i18n>transferNavette}"/>
+                <ToolbarSpacer />
+                <Button icon="sap-icon://trend-up" text="GO" press="onTransferPress"/>
+            </Toolbar>
+        </form:toolbar>
+        <Label text="{i18n>navetteNr}" required="true"/>
+        <Input id="navetteId" />
+    </form:SimpleForm>
+
+</core:FragmentDefinition>

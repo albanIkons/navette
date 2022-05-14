@@ -1,0 +1,68 @@
+<core:FragmentDefinition    height="100%" 
+                            xmlns="sap.m" 
+                            xmlns:f="sap.f"
+                            xmlns:l="sap.ui.layout" 
+                            xmlns:core="sap.ui.core"
+                            xmlns:form="sap.ui.layout.form" >
+    <VBox busy="{mainModel>/receiveBusy}">                      
+        <form:SimpleForm 
+                        columnsXL="3"
+                        columnsL="2"  
+                        columnsM="1" 
+                        layout="ColumnLayout" 
+                        labelSpanXL="3"
+                        labelSpanL="3"
+                        labelSpan="3">
+            <form:toolbar>
+                <Toolbar >
+                    <Title text="{i18n>riceviNavette}"/>
+                    <ToolbarSpacer />
+                    <Button icon="sap-icon://trend-up" text="GO" press="onReceivePress"/>
+                </Toolbar>
+            </form:toolbar>
+            <Label text="{i18n>navetteNr}" required="true"/>
+            <Input id="recNavetteId" />
+        </form:SimpleForm>
+
+        <Table id="wipOutTableId" items="{wipOutList>/}">
+            <!-- <headerToolbar>
+                <OverflowToolbar>
+                    <Title text="WIP Out (11)" />
+                </OverflowToolbar>
+            </headerToolbar> -->
+            <columns>
+                <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Text text="Column 1" wrapping="" />
+                </Column>
+                <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Text text="Column 2" wrapping="false" />
+                </Column>
+                <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Text text="Column 3" wrapping="false" />
+                </Column>
+                <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Text text="Column 4" wrapping="false" />
+                </Column>
+                <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Text text="Column 5" wrapping="false" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <customData>
+                        <core:CustomData key="mydata" 
+                        value="{wipOutList>col5}" 
+                        writeToDom="true"></core:CustomData>
+                    </customData>
+                    <cells>
+                        <ObjectIdentifier text="{wipOutList>col1}" />
+                        <ObjectIdentifier text="{wipOutList>col2}" />
+                        <ObjectIdentifier text="{wipOutList>col3}" />
+                        <ObjectIdentifier text="{wipOutList>col4}" />
+                        <ObjectIdentifier text="{wipOutList>col5}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </VBox>  
+</core:FragmentDefinition>

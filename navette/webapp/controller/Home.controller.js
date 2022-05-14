@@ -14,6 +14,13 @@ sap.ui.define([
 
         return Controller.extend("npmnavette.navette.controller.Home", {
             onInit: function () {
+                // Main Model to controll view (bussy status etc)
+                const oMainModel = {
+                    trasferBusy : false,
+                    receiveBusy : false
+                };
+                this._setModel(oMainModel, "mainModel");
+
                 //Create the empty model 
                 //Table binding
                 var oItemData = [{
@@ -29,7 +36,8 @@ sap.ui.define([
                     'um': '',
                 }];
                 this.Index = 1;
-                this._setModel(oItemData);//Function to update the model
+                this._setModel(oItemData, "items");//Function to update the model
+
             },
 
 //******************************************CREAZIONE NAVETTA**************************************************************************//
@@ -65,10 +73,10 @@ sap.ui.define([
             },
 
             //Function to create and update the model
-            _setModel: function (items) {
+            _setModel: function (items, modelName) {
                 //Set the model for the added items
                 var oitemModel = new JSONModel(items);//Create new model for the items	
-                this.getView().setModel(oitemModel, "items");//Set the model with name "items"	
+                this.getView().setModel(oitemModel, modelName);
             },
 
             //Function to create the dynamic search helps
@@ -173,7 +181,7 @@ sap.ui.define([
                     'quantita': '',
                     'um': '',
                 });
-                this._setModel(oItems);//Function to update the model
+                this._setModel(oItems, "items");//Function to update the model
             },
 
             //Function to remove an item
@@ -187,13 +195,77 @@ sap.ui.define([
                         break;
                     }
                 }
-                this._setModel(oItems);//Function to update the model	
+                this._setModel(oItems, "items");//Function to update the model	
             },
 
             //Function to check if the wip number already exists
             checkExistingWip: function (iValue) {
                 var oItems = this.getView().getModel("items").getData();//Get the values for our model and save it in a variable
+            },
+//********************************************TRANSFER NAVETTA*************************************************************************//            
+            
+            // Event handler for Transfer Navetta press 
+            onTransferPress : function (){
+                const that        = this;
+                const oConfirmMsg = this._geti18n("transferConfirm");
+                const oWarningMsg = this._geti18n("transferWarning");
+                const oNavetteNr  = this.byId("navetteId").getValue();
+                const oMainModel  = this.getView().getModel("mainModel");
+
+                oMainModel.setProperty("/trasferBusy",true); // Show busy loader 
+                MessageBox.confirm(oConfirmMsg, {
+                    actions: [MessageBox.Action.YES, MessageBox.Action.CANCEL],
+                    emphasizedAction: MessageBox.Action.YES,
+                    onClose: function (sAction) {
+                        if(sAction === "YES"){
+                            // Check that Navette number is not empty
+                            if(oNavetteNr === ""){
+                                MessageBox.warning(oWarningMsg);
+                                oMainModel.setProperty("/trasferBusy",false);
+                            }else{  // Make request to BE
+                                that.trasferNavette(oNavetteNr, oMainModel);
+                            }
+                        }else{
+                            oMainModel.setProperty("/trasferBusy",false); // Hide busy loader 
+                        }
+                    }
+                });
+            },
+
+            // Make request on BE to Transfer selected Navette
+            trasferNavette: function (NavetteNr, MainModel){
+                MessageBox.success(`This Number: "${NavetteNr}" will be sent to backend`);
+                this.byId("navetteId").setValue(""); // Clear input Field
+                MainModel.setProperty("/trasferBusy", false);
+            },
+//********************************************RICEZIONE NAVETTA*************************************************************************//              
+
+            // Event handler for Receiving Navetta press 
+            onReceivePress : function (){
+                const that        = this;
+                const oWarningMsg = this._geti18n("transferWarning");
+                const oNavetteNr  = this.byId("recNavetteId").getValue();
+                const oMainModel  = this.getView().getModel("mainModel");
+
+                // Check that Navette number is not empty
+                if(oNavetteNr === ""){
+                    MessageBox.warning(oWarningMsg);
+                }else{  // Make request to BE
+                    that.receiveWipOut(oNavetteNr, oMainModel);
+                } 
+            },
+
+            // Get List of WIP Outs
+            receiveWipOut: function(NavetteNr, MainModel){
+                const modelNew = new JSONModel("../jsonTest/dummy.json");
+                MainModel.setProperty("/receiveBusy", true);
+
+                // Just for test to see how data will be displayed with trafic lights
+                setTimeout(()=>{
+                    this.getView().setModel(modelNew, "wipOutList");
+                    MainModel.setProperty("/receiveBusy", false);
+                }, 2500);
             }
-//******************************************CREAZIONE NAVETTA**************************************************************************//            
+
         });
     });
