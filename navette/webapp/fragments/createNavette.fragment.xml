@@ -5,19 +5,14 @@
                 <f:content>
                     <fb:FilterBar id="filterbar" useToolbar="false" showGoOnFB="true" showFilterConfiguration="false" search="onGo">
                         <fb:filterItems>
-                            <!-- <fb:FilterItem name="A" label="{i18n>navetta}">
-                                <fb:control>
-                                    <Input type="Text" id="navetta" change="onChange" showValueHelp="true" valueHelpRequest=".oHeaderFilterHelp" required="true" />
-                                </fb:control>
-                            </fb:FilterItem> -->
                             <fb:FilterItem name="B" label="{i18n>partenza}">
                                 <fb:control>
-                                    <Input type="Text" id="partenza" change="onChange" showValueHelp="true" valueHelpRequest=".oHeaderFilterHelp" required="true" />
+                                    <Input type="Text" id="partenza" change="onChange" showValueHelp="true" valueHelpRequest=".onMagazzinoHelp" required="true" />
                                 </fb:control>
                             </fb:FilterItem>
                             <fb:FilterItem name="C" label="{i18n>arrivo}">
                                 <fb:control>
-                                    <Input type="Text" id="arrivo" change="onChange" showValueHelp="true" valueHelpRequest=".oHeaderFilterHelp" required="true" />
+                                    <Input type="Text" id="arrivo" change="onChange" showValueHelp="true" valueHelpRequest=".onMagazzinoHelp" required="true" />
                                 </fb:control>
                             </fb:FilterItem>
                             <fb:FilterItem name="D" label="{i18n>creazione}">
@@ -76,7 +71,7 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Input id="wip-out" key="{items>wipout}" value="{items>wipout}" change=".onInsertWip" showValueHelp="true" valueHelpRequest=".oHeaderFilterHelp"/>
+                            <Input id="wip-out" key="{items>wipout}" value="{items>wipout}" change=".onInsertWip" showValueHelp="true" valueHelpRequest=".onWipoutHelp"/>
                             <ObjectIdentifier text="{items>order}" />
                             <ObjectIdentifier text="{items>materiale}" />
                             <ObjectIdentifier text="{items>descrizione}" />

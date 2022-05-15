@@ -1,0 +1,6 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<SelectDialog id="selectMaggazino" title="{I18n>magazzino}" items="{magazzinoHelp>/}" search=".onHelpSearchMagazzino" confirm=".onHelpCloseMagazzino"
+		cancel=".onHelpCloseMagazzino">
+		<StandardListItem  title="{magazzinoHelp>HelpValue}"/>
+	</SelectDialog>
+</core:FragmentDefinition>

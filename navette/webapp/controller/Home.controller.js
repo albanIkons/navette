@@ -16,8 +16,8 @@ sap.ui.define([
             onInit: function () {
                 // Main Model to controll view (bussy status etc)
                 const oMainModel = {
-                    trasferBusy : false,
-                    receiveBusy : false
+                    trasferBusy: false,
+                    receiveBusy: false
                 };
                 this._setModel(oMainModel, "mainModel");
 
@@ -40,7 +40,7 @@ sap.ui.define([
 
             },
 
-//******************************************CREAZIONE NAVETTA**************************************************************************//
+            //******************************************CREAZIONE NAVETTA**************************************************************************//
             //Function to handle the go button of the toolbar
             onGo: function () {
                 var oCheckFields = this.checkMandatoryFields();
@@ -61,7 +61,7 @@ sap.ui.define([
                 var oData = this.byId("creazione").getValue();
 
                 // if (oPartenza && oArrivo && oData) {
-                    return true;
+                return true;
                 // } else {
                 //     return false;
                 // }
@@ -79,65 +79,77 @@ sap.ui.define([
                 this.getView().setModel(oitemModel, modelName);
             },
 
-            //Function to create the dynamic search helps
-            oHeaderFilterHelp: function (oEvent) {
-                var oInputId = oEvent.mParameters.id;
-                var oHelpObject = {
-                    title: ""
-                };
-                var oHelpItem = [];
-                var sInputValue = oEvent.getSource().getValue();
-                var oView = this.getView();
-                // this.oInputSelected = oInputId.substring(74);
-                this.oInputSelected = oInputId.substring(oEvent.getSource().getId().length - 8);
+            //Magazzino Help
+            onMagazzinoHelp: function (oEvent) {
+                const that = this;
+                const oView = this.getView();
+                const sInputValue = oEvent.getSource().getValue();
+                that.getView().getModel().read("/", {
+                    success: function (oData) {
+                        that.getView().setModel(new JSONModel(oData.results), "order");
 
-                //Create dynamic serch helps
-                switch (this.oInputSelected) {
-                    case "wip_out_":
-                        oHelpObject = this.onCreateHelpTitleModels("wipout");
-                        break;
-                    case "partenza":
-                        oHelpObject = this.onCreateHelpTitleModels("partenza");
-                        break;
-                    case "arrivo__":
-                        oHelpObject = this.onCreateHelpTitleModels("arrivo");
-                        break;
-                    default:
-                        break;
-                }
+                        if (!that._pValueHelporderDialog) {
+                            that._pValueHelporderDialog = Fragment.load({
+                                id: oView.getId(),
+                                name: "npmnavette.navette.fragments.magazinoHelp",
+                                controller: that
+                            }).then(function (oDialog) {
+                                oView.addDependent(oDialog);
+                                return oDialog;
+                            });
+                        }
+                        that._pValueHelporderDialog.then(function (oDialog) {
+                            // Create a filter for the binding
+                            oDialog.getBinding("items").filter([
+                                new Filter("field", FilterOperator.Contains, sInputValue)
+                            ]);
+                            // Open ValueHelpDialog filtered by the input's value
+                            oDialog.open(sInputValue);
+                        });
 
-                var oHelpModel = new JSONModel(oHelpObject);
-                this.getView().setModel(oHelpModel, "helpModel");
-
-                var oHelpItemModel = new JSONModel(oHelpItem);
-                this.getView().setModel(oHelpItemModel, "helpModelItem");
-
-                if (!this._pHelpDialog) {
-                    this._pHelpDialog = Fragment.load({
-                        id: oView.getId(),
-                        name: "npmnavette.navette.fragments.headerFilter",
-                        controller: this
-                    }).then(function (oDialog) {
-                        oView.addDependent(oDialog);
-                        return oDialog;
-                    });
-                }
-
-                this._pHelpDialog.then(function (oDialog) {
-                    // Create a filter for the binding
-                    oDialog.getBinding("items").filter([new Filter("HelpValue", FilterOperator.Contains, sInputValue)]);
-                    // Open ValueHelpDialog filtered by the input's value
-                    oDialog.open(sInputValue);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
                 });
             },
+            //Magazzino Help
 
-            //Create the title for the search helps
-            onCreateHelpTitleModels: function (oTitle) {
-                var oHelpObject = {
-                    title: this._geti18n(oTitle)// this.getView().getModel("i18n").getResourceBundle().getText(oTitle)
-                };
-                return oHelpObject;
+            //Wip Out Help
+            onWipoutHelp: function (oEvent) {
+                const that = this;
+                const oView = this.getView();
+                const sInputValue = oEvent.getSource().getValue();
+                that.getView().getModel().read("/", {
+                    success: function (oData) {
+                        that.getView().setModel(new JSONModel(oData.results), "order");
+
+                        if (!that._pValueHelporderDialog) {
+                            that._pValueHelporderDialog = Fragment.load({
+                                id: oView.getId(),
+                                name: "npmnavette.navette.fragments.wipoutHelp",
+                                controller: that
+                            }).then(function (oDialog) {
+                                oView.addDependent(oDialog);
+                                return oDialog;
+                            });
+                        }
+                        that._pValueHelporderDialog.then(function (oDialog) {
+                            // Create a filter for the binding
+                            oDialog.getBinding("items").filter([
+                                new Filter("field", FilterOperator.Contains, sInputValue)
+                            ]);
+                            // Open ValueHelpDialog filtered by the input's value
+                            oDialog.open(sInputValue);
+                        });
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
             },
+            //Wip Out Help
 
             //Function to handle new wip insertion
             onInsertWip: function (oEvent) {
@@ -202,66 +214,66 @@ sap.ui.define([
             checkExistingWip: function (iValue) {
                 var oItems = this.getView().getModel("items").getData();//Get the values for our model and save it in a variable
             },
-//********************************************TRANSFER NAVETTA*************************************************************************//            
-            
+            //********************************************TRANSFER NAVETTA*************************************************************************//            
+
             // Event handler for Transfer Navetta press 
-            onTransferPress : function (){
-                const that        = this;
+            onTransferPress: function () {
+                const that = this;
                 const oConfirmMsg = this._geti18n("transferConfirm");
                 const oWarningMsg = this._geti18n("transferWarning");
-                const oNavetteNr  = this.byId("navetteId").getValue();
-                const oMainModel  = this.getView().getModel("mainModel");
+                const oNavetteNr = this.byId("navetteId").getValue();
+                const oMainModel = this.getView().getModel("mainModel");
 
-                oMainModel.setProperty("/trasferBusy",true); // Show busy loader 
+                oMainModel.setProperty("/trasferBusy", true); // Show busy loader 
                 MessageBox.confirm(oConfirmMsg, {
                     actions: [MessageBox.Action.YES, MessageBox.Action.CANCEL],
                     emphasizedAction: MessageBox.Action.YES,
                     onClose: function (sAction) {
-                        if(sAction === "YES"){
+                        if (sAction === "YES") {
                             // Check that Navette number is not empty
-                            if(oNavetteNr === ""){
+                            if (oNavetteNr === "") {
                                 MessageBox.warning(oWarningMsg);
-                                oMainModel.setProperty("/trasferBusy",false);
-                            }else{  // Make request to BE
+                                oMainModel.setProperty("/trasferBusy", false);
+                            } else {  // Make request to BE
                                 that.trasferNavette(oNavetteNr, oMainModel);
                             }
-                        }else{
-                            oMainModel.setProperty("/trasferBusy",false); // Hide busy loader 
+                        } else {
+                            oMainModel.setProperty("/trasferBusy", false); // Hide busy loader 
                         }
                     }
                 });
             },
 
             // Make request on BE to Transfer selected Navette
-            trasferNavette: function (NavetteNr, MainModel){
+            trasferNavette: function (NavetteNr, MainModel) {
                 MessageBox.success(`This Number: "${NavetteNr}" will be sent to backend`);
                 this.byId("navetteId").setValue(""); // Clear input Field
                 MainModel.setProperty("/trasferBusy", false);
             },
-//********************************************RICEZIONE NAVETTA*************************************************************************//              
+            //********************************************RICEZIONE NAVETTA*************************************************************************//              
 
             // Event handler for Receiving Navetta press 
-            onReceivePress : function (){
-                const that        = this;
+            onReceivePress: function () {
+                const that = this;
                 const oWarningMsg = this._geti18n("transferWarning");
-                const oNavetteNr  = this.byId("recNavetteId").getValue();
-                const oMainModel  = this.getView().getModel("mainModel");
+                const oNavetteNr = this.byId("recNavetteId").getValue();
+                const oMainModel = this.getView().getModel("mainModel");
 
                 // Check that Navette number is not empty
-                if(oNavetteNr === ""){
+                if (oNavetteNr === "") {
                     MessageBox.warning(oWarningMsg);
-                }else{  // Make request to BE
+                } else {  // Make request to BE
                     that.receiveWipOut(oNavetteNr, oMainModel);
-                } 
+                }
             },
 
             // Get List of WIP Outs
-            receiveWipOut: function(NavetteNr, MainModel){
+            receiveWipOut: function (NavetteNr, MainModel) {
                 const modelNew = new JSONModel("../jsonTest/dummy.json");
                 MainModel.setProperty("/receiveBusy", true);
 
                 // Just for test to see how data will be displayed with trafic lights
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.getView().setModel(modelNew, "wipOutList");
                     MainModel.setProperty("/receiveBusy", false);
                 }, 2500);

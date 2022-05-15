@@ -1,0 +1,6 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<SelectDialog id="selectWipout" title="{I18n>wipout}" items="{wipoutHelp>/}" search=".onHelpSearchWipout" confirm=".onHelpCloseWipout"
+		cancel=".onHelpCloseWipout">
+		<StandardListItem title="{wipoutHelp>HelpValue}"/>
+	</SelectDialog>
+</core:FragmentDefinition>
