@@ -21,7 +21,7 @@
                 </Toolbar>
             </form:toolbar>
             <Label text="{i18n>navetteNr}" required="true"/>
-            <Input id="recNavetteId" />
+            <Input id="recNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
         </form:SimpleForm>
 
         <Table id="wipOutTableId" items="{wipOutList>/}">

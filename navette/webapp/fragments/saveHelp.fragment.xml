@@ -1,0 +1,46 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+    <Dialog title="{i18n>creazioneNavette}" stretch="true">
+        <content>
+            <VBox>
+                <FlexBox width="100%" justifyContent="Center" alignItems="Center">
+                    <FlexBox width="75%" justifyContent="Center" alignItems="Center">
+                        <VBox>
+                            <Table inset="false" id="tableMenge">
+                                <columns>
+                                    <Column></Column>
+                                    <Column></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{i18n>partenza}" />
+                                            <Input type="Text" id="partenza" change="onChange" showValueHelp="true" valueHelpRequest=".onMagazzinoHelp" required="true" />
+                                        </cells>
+                                    </ColumnListItem>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{i18n>arrivo}" />
+                                            <Input type="Text" id="arrivo__" change="onChange" showValueHelp="true" valueHelpRequest=".onMagazzinoHelp" required="true" />
+                                        </cells>
+                                    </ColumnListItem>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{i18n>creazione}" />
+                                                <DatePicker id="creazione" placeholder="Enter Date" change="handleChange" class="sapUiSmallMarginBottom" required="true" />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </VBox>
+                    </FlexBox>
+                </FlexBox>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button type="Accept" text="{i18n>salva}" press="onSaveNavetta"/>
+        </beginButton>
+        <endButton>
+            <Button type="Reject" text="{i18n>cancela}" press="onCloseDialog" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

@@ -25,15 +25,20 @@ sap.ui.define([
                 //Table binding
                 var oItemData = [{
                     'index': 1,
-                    'wipout': '',
-                    'ordine': '',
-                    'materiale': '',
-                    'descrizione': '',
-                    'icona': '',
-                    'stato': '',
-                    'centro_di_lavoro': '',
-                    'quantita': '',
-                    'um': '',
+                    'ARBPL': "",
+                    'AUFNR': "",
+                    'ICONA_COLLAUDO': "",
+                    'ICONA_COLORE': "",
+                    'LGORT': "",
+                    'MAKTX': "",
+                    'MATNR': "",
+                    'MEINS': "",
+                    'MENGE': "",
+                    'MESSAGE': "",
+                    'NAVNUM': "",
+                    'STATO_COLLAUDO': "",
+                    'STATO_COLORE': "",
+                    'WIP_OUT': ""
                 }];
                 this.Index = 1;
                 this._setModel(oItemData, "items");//Function to update the model
@@ -41,30 +46,22 @@ sap.ui.define([
             },
 
             //******************************************CREAZIONE NAVETTA**************************************************************************//
-            //Function to handle the go button of the toolbar
-            onGo: function () {
-                var oCheckFields = this.checkMandatoryFields();
-                var oWarn = this._geti18n("mandatory");
-
-                if (oCheckFields === false) {//if all the fields are filled make table visible
-                    MessageBox.warning(oWarn);
-                } else {
-                    this.getView().byId("table").setVisible(true)
-                }
+            onSavePopUp:function () {
+                this._getDialog().open();//Call the dialog to insert magazzino and date
             },
 
-            //Function to check if all the mandatory fields are filled
-            checkMandatoryFields: function () {
-                // var oNavetta = this.byId("navetta").getValue();
-                var oPartenza = this.byId("partenza").getValue();
-                var oArrivo = this.byId("arrivo").getValue();
-                var oData = this.byId("creazione").getValue();
+            //Dialog before save
+            _getDialog: function () {
+                if (!this._oDialog) {
+                    this._oDialog = sap.ui.xmlfragment("npmnavette.navette.fragments.saveHelp", this.getView().getController());
+                    this.getView().addDependent(this._oDialog);
+                }
+                return this._oDialog;
+            },
 
-                // if (oPartenza && oArrivo && oData) {
-                return true;
-                // } else {
-                //     return false;
-                // }
+            //Close save dialog
+            onBtnCancelPress: function () {
+                this.closeDialog();
             },
 
             // Get text translations from i18n ----------------------------------------------------
@@ -84,12 +81,13 @@ sap.ui.define([
                 const that = this;
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
-                that.getView().getModel().read("/", {
+                this.MagazzinoId = oEvent.mParameters.id.substring(oEvent.getSource().getId().length - 8);
+                that.getView().getModel().read("/get_lgortSet", {
                     success: function (oData) {
-                        that.getView().setModel(new JSONModel(oData.results), "order");
+                        that.getView().setModel(new JSONModel(oData.results), "magazzinoHelp");
 
-                        if (!that._pValueHelporderDialog) {
-                            that._pValueHelporderDialog = Fragment.load({
+                        if (!that._pValueHelpMagazzinoDialog) {
+                            that._pValueHelpMagazzino = Fragment.load({
                                 id: oView.getId(),
                                 name: "npmnavette.navette.fragments.magazinoHelp",
                                 controller: that
@@ -98,10 +96,10 @@ sap.ui.define([
                                 return oDialog;
                             });
                         }
-                        that._pValueHelporderDialog.then(function (oDialog) {
+                        that._pValueHelpMagazzino.then(function (oDialog) {
                             // Create a filter for the binding
                             oDialog.getBinding("items").filter([
-                                new Filter("field", FilterOperator.Contains, sInputValue)
+                                new Filter("LGORT", FilterOperator.Contains, sInputValue)
                             ]);
                             // Open ValueHelpDialog filtered by the input's value
                             oDialog.open(sInputValue);
@@ -112,6 +110,22 @@ sap.ui.define([
                         console.log(err);
                     }
                 });
+            },
+
+            onHelpSearchMagazzino: function (oEvent) {
+                const sValue = oEvent.getParameter("value");
+                const oFilter = new Filter("LGORT", FilterOperator.Contains, sValue);
+                oEvent.getSource().getBinding("items").filter([oFilter]);
+            },
+
+            onHelpCloseMagazzino: function (oEvent) {
+                const oSelectedItem = oEvent.getParameter("selectedItem");
+                oEvent.getSource().getBinding("items").filter([]);
+
+                if (!oSelectedItem) return;
+                const oMagazzino = `${oSelectedItem.getTitle()} - ${oSelectedItem.getDescription()}`;
+                // Set selected key values to input field------------------------------------------
+                sap.ui.getCore().byId(this.MagazzinoId).setValue(oMagazzino)
             },
             //Magazzino Help
 
@@ -120,12 +134,15 @@ sap.ui.define([
                 const that = this;
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
-                that.getView().getModel().read("/", {
-                    success: function (oData) {
-                        that.getView().setModel(new JSONModel(oData.results), "order");
 
-                        if (!that._pValueHelporderDialog) {
-                            that._pValueHelporderDialog = Fragment.load({
+                this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
+
+                this.getView().getModel().read("/get_wipSet", {
+                    success: function (oData) {
+                        that.getView().setModel(new JSONModel(oData.results), "wipoutHelp");
+
+                        if (!that._pValueHelpWipOutDialog) {
+                            that._pValueHelpWipOutDialog = Fragment.load({
                                 id: oView.getId(),
                                 name: "npmnavette.navette.fragments.wipoutHelp",
                                 controller: that
@@ -134,10 +151,10 @@ sap.ui.define([
                                 return oDialog;
                             });
                         }
-                        that._pValueHelporderDialog.then(function (oDialog) {
+                        that._pValueHelpWipOutDialog.then(function (oDialog) {
                             // Create a filter for the binding
                             oDialog.getBinding("items").filter([
-                                new Filter("field", FilterOperator.Contains, sInputValue)
+                                new Filter("WIP_OUT", FilterOperator.Contains, sInputValue)
                             ]);
                             // Open ValueHelpDialog filtered by the input's value
                             oDialog.open(sInputValue);
@@ -149,30 +166,57 @@ sap.ui.define([
                     }
                 });
             },
+
+            onHelpSearchWipout: function (oEvent) {
+                const sValue = oEvent.getParameter("value");
+                const oFilter = new Filter("WIP_OUT", FilterOperator.Contains, sValue);
+                oEvent.getSource().getBinding("items").filter([oFilter]);
+            },
+
+            onHelpCloseWipout: function (oEvent) {
+                const oSelectedItem = oEvent.getParameter("selectedItem");
+                oEvent.getSource().getBinding("items").filter([]);
+
+                if (!oSelectedItem) return;
+                const oWipOut = oSelectedItem.getTitle();
+                //Call the wip out details
+                this.onInsertWip(oWipOut);
+            },
             //Wip Out Help
 
             //Function to handle new wip insertion
-            onInsertWip: function (oEvent) {
-                var oValue = oEvent.mParameters.newValue;
-                var oItems = this.getView().getModel("items").getData();//Get the values for our table model 
-                var oSelectedItem = oEvent.getSource().getBindingContext("items").getObject()
-                var oCheckWip = this.checkExistingWip(oValue);
+            onInsertWip: function (iWipOut) {
+                const that = this;
+                const oLgort = this.checkFieldSplit(this.byId("arrivo__").getValue())
+                const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
+                // const aFilter = new Filter({
+                //     filters: [new Filter('WIP_OUT', FilterOperator.EQ, iWipOut),
+                //               new Filter('LGORT', FilterOperator.EQ, oLgort)]
+                // })
+                const aFilter = new Filter('WIP_OUT', FilterOperator.EQ, iWipOut);
+                var oCheckWip = this.checkExistingWip(iWipOut);
 
-                //Add the values to the selected row
-                for (var i = 0; i < oItems.length; i++) {
-                    if (oSelectedItem.index == oItems[i].index) {
-                        oItems[i].order = "123";
-                        oItems[i].materiale = "material 1";
-                        oItems[i].descrizione = "material description";
-                        oItems[i].icona = "Green";
-                        oItems[i].stato = "OK";
-                        oItems[i].centro_di_lavoro = "Work center";
-                        oItems[i].quantita = "100";
-                        oItems[i].um = "PC";
-                        break;
+                this.getView().getModel().read("/get_wipdataSet", {
+                    filters: [aFilter],
+                    success: function (oData) {
+                        if (oData.results.length === 1) {
+                            for (var i = 0; i < oItems.length; i++) {//Change the selected index
+                                if (oItems[i].index === that.SelectedIndex) {
+                                    oItems[i] = oData.results[0];
+                                    oItems[i].index = that.SelectedIndex;
+                                    that._setModel(oItems, "items");//Function to update the model	
+                                    break;
+
+                                }
+                            }
+                        } else {
+                            MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noWipout"));
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
                     }
-                }
-                this.setModel(oItems);//Function to update the model	
+                });
             },
 
             //Function to add a new item 
@@ -183,15 +227,20 @@ sap.ui.define([
                 //We add an empty row to our table model
                 oItems.push({
                     'index': this.Index,
-                    'wipout': '',
-                    'ordine': '',
-                    'materiale': '',
-                    'descrizione': '',
-                    'icona': '',
-                    'stato': '',
-                    'centro_di_lavoro': '',
-                    'quantita': '',
-                    'um': '',
+                    'ARBPL': "",
+                    'AUFNR': "",
+                    'ICONA_COLLAUDO': "",
+                    'ICONA_COLORE': "",
+                    'LGORT': "",
+                    'MAKTX': "",
+                    'MATNR': "test",
+                    'MEINS': "",
+                    'MENGE': "",
+                    'MESSAGE': "",
+                    'NAVNUM': "",
+                    'STATO_COLLAUDO': "",
+                    'STATO_COLORE': "",
+                    'WIP_OUT': ""
                 });
                 this._setModel(oItems, "items");//Function to update the model
             },
@@ -213,6 +262,23 @@ sap.ui.define([
             //Function to check if the wip number already exists
             checkExistingWip: function (iValue) {
                 var oItems = this.getView().getModel("items").getData();//Get the values for our model and save it in a variable
+            },
+
+            _showFooter: function (iBool) {
+                const oPage = this.byId("page");
+                // if (!oPage.getShowFooter()) {
+                oPage.setShowFooter(iBool);
+                // }
+            },
+
+            onIconTabBarSelect: function (oEvent) {
+                const oKey = oEvent.getParameter("key");
+
+                if (oKey == "create") {
+                    this._showFooter(true);
+                } else {
+                    this._showFooter(false);
+                }
             },
             //********************************************TRANSFER NAVETTA*************************************************************************//            
 
@@ -243,6 +309,59 @@ sap.ui.define([
                     }
                 });
             },
+
+            //Navette Help
+            onNavetteHelp: function (oEvent) {
+                const that = this;
+                const oView = this.getView();
+                const sInputValue = oEvent.getSource().getValue();
+
+                that.getView().getModel().read("/get_navnumSet", {
+                    success: function (oData) {
+                        that.getView().setModel(new JSONModel(oData.results), "navetteHelp");
+
+                        if (!that._pValueHelpNavetteDialog) {
+                            that._pValueHelpNavetteDialog = Fragment.load({
+                                id: oView.getId(),
+                                name: "npmnavette.navette.fragments.navetteHelp",
+                                controller: that
+                            }).then(function (oDialog) {
+                                oView.addDependent(oDialog);
+                                return oDialog;
+                            });
+                        }
+                        that._pValueHelpNavetteDialog.then(function (oDialog) {
+                            // Create a filter for the binding
+                            oDialog.getBinding("items").filter([
+                                new Filter("NAVNUM", FilterOperator.Contains, sInputValue)
+                            ]);
+                            // Open ValueHelpDialog filtered by the input's value
+                            oDialog.open(sInputValue);
+                        });
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            },
+
+            onHelpSearchNavette: function (oEvent) {
+                const sValue = oEvent.getParameter("value");
+                const oFilter = new Filter("LGORT", FilterOperator.Contains, sValue);
+                oEvent.getSource().getBinding("items").filter([oFilter]);
+            },
+
+            onHelpCloseNavette: function (oEvent) {
+                const oSelectedItem = oEvent.getParameter("selectedItem");
+                oEvent.getSource().getBinding("items").filter([]);
+
+                if (!oSelectedItem) return;
+                const oMagazzino = `${oSelectedItem.getTitle()} - ${oSelectedItem.getDescription()}`;
+                // Set selected key values to input field------------------------------------------
+                this.byId(this.MagazzinoId).setValue(oMagazzino);
+            },
+            //Navette Help
 
             // Make request on BE to Transfer selected Navette
             trasferNavette: function (NavetteNr, MainModel) {
@@ -277,7 +396,16 @@ sap.ui.define([
                     this.getView().setModel(modelNew, "wipOutList");
                     MainModel.setProperty("/receiveBusy", false);
                 }, 2500);
-            }
+            },
+
+            //Split the input fields
+            checkFieldSplit: function (iValue) {
+                if (iValue.includes("-")) {
+                    return iValue.split("-")[0].trim();
+                } else {
+                    return iValue;
+                }
+            },
 
         });
     });
