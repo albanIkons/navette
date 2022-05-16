@@ -46,9 +46,41 @@ sap.ui.define([
             },
 
             //******************************************CREAZIONE NAVETTA**************************************************************************//
-            onSavePopUp:function () {
+            onSavePopUp: function () {
                 this._getDialog().open();//Call the dialog to insert magazzino and date
             },
+
+            onSaveNavetta: function () {
+                const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
+                const requestBody = {
+                    NAVNUM: "0000000000",
+                    navettatowip: []
+                };
+
+                for (var i = 0; i < oItems.length; i++) {
+                    oItems[i].Lgort = this.checkFieldSplit(sap.ui.getCore().byId("partenza").getValue());
+                    oItems[i].Umlgo = this.checkFieldSplit(sap.ui.getCore().byId("arrivo__").getValue());
+
+                    oItems[i].NAVNUM = "0000000000";
+                    delete oItems[i].index;
+
+                    requestBody.navettatowip.push(oItems[i]);
+                }
+
+                // requestBody.NAVNUM = "&&";
+                // requestBody.navettatowip = oItems;
+
+                this.getView().getModel().create("/update_navettaSet", requestBody, {
+                    success: function (oData) {
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+
+            },
+
 
             //Dialog before save
             _getDialog: function () {
@@ -125,7 +157,7 @@ sap.ui.define([
                 if (!oSelectedItem) return;
                 const oMagazzino = `${oSelectedItem.getTitle()} - ${oSelectedItem.getDescription()}`;
                 // Set selected key values to input field------------------------------------------
-                sap.ui.getCore().byId(this.MagazzinoId).setValue(oMagazzino)
+                sap.ui.getCore().byId(this.MagazzinoId).setValue(oMagazzino);
             },
             //Magazzino Help
 
@@ -187,7 +219,7 @@ sap.ui.define([
             //Function to handle new wip insertion
             onInsertWip: function (iWipOut) {
                 const that = this;
-                const oLgort = this.checkFieldSplit(this.byId("arrivo__").getValue())
+                // const oLgort = this.checkFieldSplit(this.byId("arrivo__").getValue())
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
                 // const aFilter = new Filter({
                 //     filters: [new Filter('WIP_OUT', FilterOperator.EQ, iWipOut),
@@ -281,7 +313,6 @@ sap.ui.define([
                 }
             },
             //********************************************TRANSFER NAVETTA*************************************************************************//            
-
             // Event handler for Transfer Navetta press 
             onTransferPress: function () {
                 const that = this;
