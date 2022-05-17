@@ -4,15 +4,17 @@ sap.ui.define([
     'sap/ui/model/json/JSONModel',
     "sap/ui/core/Fragment",
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
+    "sap/ui/model/FilterOperator",
+    "../model/formatter"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, MessageBox, JSONModel, Fragment, Filter, FilterOperator) {
+    function (Controller, MessageBox, JSONModel, Fragment, Filter, FilterOperator, formatter) {
         "use strict";
 
         return Controller.extend("npmnavette.navette.controller.Home", {
+            formatter: formatter,
             onInit: function () {
                 // Main Model to controll view (bussy status etc)
                 const oMainModel = {
@@ -50,41 +52,52 @@ sap.ui.define([
                 this._getDialog().open();//Call the dialog to insert magazzino and date
             },
 
+            //Save or update the navetta
             onSaveNavetta: function () {
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
-                const requestBody = {
-                    NAVNUM: "0000000000",
-                    navettatowip: [ {
-                        "NAVNUM" : "0000000000",
-                        "WIP_OUT" : "10-1"
-                        }
-                    ]
+                const oNavnum = this.getView().byId("navetteIdCreate").getValue();
+
+                const requestBody = {//Create the structure fo deep entity
+                    NAVNUM: (oNavnum == "") ? '&&' : oNavnum, //Header
+                    navettatowip: [] // Item
                 };
 
-                // for (var i = 0; i < oItems.length; i++) {
-                //     oItems[i].Lgort = this.checkFieldSplit(sap.ui.getCore().byId("partenza").getValue());
-                //     oItems[i].Umlgo = this.checkFieldSplit(sap.ui.getCore().byId("arrivo__").getValue());
+                //Create the item section for the deep entity call
+                for (var i = 0; i < oItems.length; i++) {
+                    const oTempItems = {};
+                    oTempItems.NAVNUM = (oNavnum == "") ? '&&' : oNavnum;
+                    oTempItems.WIP_OUT = oItems[i].WIP_OUT;
+                    oTempItems.AUFNR = oItems[i].AUFNR;
+                    oTempItems.LGORT = this.checkFieldSplit(sap.ui.getCore().byId("partenza").getValue());
+                    oTempItems.UMLGO = this.checkFieldSplit(sap.ui.getCore().byId("arrivo__").getValue());
+                    oTempItems.MATNR = oItems[i].MATNR;
+                    oTempItems.MAKTX = oItems[i].MAKTX;
+                    oTempItems.ARBPL = oItems[i].ARBPL;
+                    oTempItems.MENGE = oItems[i].MENGE;
+                    oTempItems.MEINS = oItems[i].MEINS;
+                    oTempItems.ERDAT = new Date(sap.ui.getCore().byId("creazione").getValue());
 
-                //     oItems[i].NAVNUM = "0000000000";
-                //     delete oItems[i].index;
+                    requestBody.navettatowip.push(oTempItems);
+                }
 
-                //     requestBody.navettatowip.push(oItems[i]);
-                // }
-
-                // requestBody.NAVNUM = "&&";
-                // requestBody.navettatowip = oItems;
-
+                //Call the deep entity
                 this.getView().getModel().create("/update_navettaSet", requestBody, {
                     success: function (oData) {
-
+                        if (oNavnum) {//Check if we are updating or creating and show error/success message
+                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("updateSuccess") + oNavnum);
+                        } else {
+                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("createSuccess") + oData[0].NAVNUM);
+                        }
                     },
                     error: function (err) {
-                        console.log(err);
+                        if (oNavnum) {
+                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("updateError"));
+                        } else {
+                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("createError"));
+                        }
                     }
                 });
-
             },
-
 
             //Dialog before save
             _getDialog: function () {
@@ -96,8 +109,8 @@ sap.ui.define([
             },
 
             //Close save dialog
-            onBtnCancelPress: function () {
-                this.closeDialog();
+            onCloseDialog: function () {
+                this._getDialog().close();
             },
 
             // Get text translations from i18n ----------------------------------------------------
@@ -110,6 +123,19 @@ sap.ui.define([
                 //Set the model for the added items
                 var oitemModel = new JSONModel(items);//Create new model for the items	
                 this.getView().setModel(oitemModel, modelName);
+            },
+
+            //Get the already saved navetta
+            getNavettaList: function () {
+                const that = this;
+
+                this.getView().getModel().read("/dati_navettaSet", {
+                    success: function (oData) {
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
             },
 
             //Magazzino Help
@@ -232,27 +258,31 @@ sap.ui.define([
                 const aFilter = new Filter('WIP_OUT', FilterOperator.EQ, iWipOut);
                 var oCheckWip = this.checkExistingWip(iWipOut);
 
-                this.getView().getModel().read("/get_wipdataSet", {
-                    filters: [aFilter],
-                    success: function (oData) {
-                        if (oData.results.length === 1) {
-                            for (var i = 0; i < oItems.length; i++) {//Change the selected index
-                                if (oItems[i].index === that.SelectedIndex) {
-                                    oItems[i] = oData.results[0];
-                                    oItems[i].index = that.SelectedIndex;
-                                    that._setModel(oItems, "items");//Function to update the model	
-                                    break;
-
+                if (!oCheckWip) {//Add wip only in case is not already used
+                    this.getView().getModel().read("/get_wipdataSet", {
+                        filters: [aFilter],
+                        success: function (oData) {
+                            if (oData.results.length === 1) {
+                                for (var i = 0; i < oItems.length; i++) {//Change the selected index
+                                    if (oItems[i].index === that.SelectedIndex) {
+                                        oItems[i] = oData.results[0];
+                                        oItems[i].index = that.SelectedIndex;
+                                        that._setModel(oItems, "items");//Function to update the model	
+                                        break;
+                                    }
                                 }
+                            } else {
+                                MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noWipout"));
                             }
-                        } else {
-                            MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noWipout"));
+                        },
+                        error: function (err) {
+                            console.log(err);
                         }
-                    },
-                    error: function (err) {
-                        console.log(err);
-                    }
-                });
+                    });
+                } else {
+                    MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("existingWip"));
+                }
+
             },
 
             //Function to add a new item 
@@ -269,7 +299,7 @@ sap.ui.define([
                     'ICONA_COLORE': "",
                     'LGORT': "",
                     'MAKTX': "",
-                    'MATNR': "test",
+                    'MATNR': "",
                     'MEINS': "",
                     'MENGE': "",
                     'MESSAGE': "",
@@ -298,8 +328,15 @@ sap.ui.define([
             //Function to check if the wip number already exists
             checkExistingWip: function (iValue) {
                 var oItems = this.getView().getModel("items").getData();//Get the values for our model and save it in a variable
+                for (var i = 0; i < oItems.length; i++) {
+                    if (oItems[i].WIP_OUT === iValue) {
+                        return true;
+                    }
+                }
+                return false;
             },
 
+            //Hide or shoe footer if we are on the creation tab
             _showFooter: function (iBool) {
                 const oPage = this.byId("page");
                 // if (!oPage.getShowFooter()) {
@@ -307,9 +344,9 @@ sap.ui.define([
                 // }
             },
 
+            //Get the selected filter tab
             onIconTabBarSelect: function (oEvent) {
                 const oKey = oEvent.getParameter("key");
-
                 if (oKey == "create") {
                     this._showFooter(true);
                 } else {

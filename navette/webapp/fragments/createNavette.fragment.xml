@@ -103,7 +103,7 @@
             </Toolbar>
         </form:toolbar>
         <Label text="{i18n>navetteNr}"/>
-        <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" />
+        <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" change="getNavettaList"/>
     </form:SimpleForm>
 
     <Table id="table" items="{items>/}" visible="true">
@@ -130,9 +130,9 @@
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="Icona" wrapping="false" />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
+            <!-- <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="{i18n>stato}" wrapping="false" />
-            </Column>
+            </Column> -->
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="{i18n>centroLavoro}" wrapping="false" />
             </Column>
@@ -153,8 +153,7 @@
                     <ObjectIdentifier text="{items>AUFNR}" />
                     <ObjectIdentifier text="{items>MATNR}" />
                     <ObjectIdentifier text="{items>MAKTX}" />
-                    <ObjectIdentifier text="{items>STATO_COLLAUDO}" />
-                    <ObjectIdentifier text="{items>STATO_COLORE}" />
+                    <core:Icon src="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.icona'}" color="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.iconaColor'}"/>
                     <ObjectIdentifier text="{items>ARBPL}" />
                     <ObjectIdentifier text="{items>MENGE}" />
                     <ObjectIdentifier text="{items>MEINS}" />
