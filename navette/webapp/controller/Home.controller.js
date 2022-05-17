@@ -54,18 +54,22 @@ sap.ui.define([
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
                 const requestBody = {
                     NAVNUM: "0000000000",
-                    navettatowip: []
+                    navettatowip: [ {
+                        "NAVNUM" : "0000000000",
+                        "WIP_OUT" : "10-1"
+                        }
+                    ]
                 };
 
-                for (var i = 0; i < oItems.length; i++) {
-                    oItems[i].Lgort = this.checkFieldSplit(sap.ui.getCore().byId("partenza").getValue());
-                    oItems[i].Umlgo = this.checkFieldSplit(sap.ui.getCore().byId("arrivo__").getValue());
+                // for (var i = 0; i < oItems.length; i++) {
+                //     oItems[i].Lgort = this.checkFieldSplit(sap.ui.getCore().byId("partenza").getValue());
+                //     oItems[i].Umlgo = this.checkFieldSplit(sap.ui.getCore().byId("arrivo__").getValue());
 
-                    oItems[i].NAVNUM = "0000000000";
-                    delete oItems[i].index;
+                //     oItems[i].NAVNUM = "0000000000";
+                //     delete oItems[i].index;
 
-                    requestBody.navettatowip.push(oItems[i]);
-                }
+                //     requestBody.navettatowip.push(oItems[i]);
+                // }
 
                 // requestBody.NAVNUM = "&&";
                 // requestBody.navettatowip = oItems;
