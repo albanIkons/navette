@@ -1,101 +1,4 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:t="sap.ui.table" xmlns:form="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:b="sap.uxap" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
-    <!-- <f:DynamicPage id="dynamicPageId" showFooter="true"> -->
-    <!-- <f:header>
-            <f:DynamicPageHeader pinnable="false">
-                <f:content>
-                    <fb:FilterBar id="filterbar" useToolbar="false" showGoOnFB="true" showFilterConfiguration="false" search="onGo">
-                        <fb:filterItems>
-                            <fb:FilterItem name="B" label="{i18n>partenza}">
-                                <fb:control>
-                                    <Input type="Text" id="partenza" change="onChange" showValueHelp="true" valueHelpRequest=".onMagazzinoHelp" required="true" />
-                                </fb:control>
-                            </fb:FilterItem>
-                            <fb:FilterItem name="C" label="{i18n>arrivo}">
-                                <fb:control>
-                                    <Input type="Text" id="arrivo__" change="onChange" showValueHelp="true" valueHelpRequest=".onMagazzinoHelp" required="true" />
-                                </fb:control>
-                            </fb:FilterItem>
-                            <fb:FilterItem name="D" label="{i18n>creazione}">
-                                <fb:control>
-                                    <DatePicker id="creazione" placeholder="Enter Date" change="handleChange" class="sapUiSmallMarginBottom" required="true" />
-                                </fb:control>
-                            </fb:FilterItem>
-                        </fb:filterItems>
-                    </fb:FilterBar>
-                </f:content>
-            </f:DynamicPageHeader>
-        </f:header> -->
-
-    <!-- DynamicPage Content -->
-    <!-- <f:content>
-            <Table id="table" items="{items>/}" visible="false">
-                <headerToolbar>
-                    <OverflowToolbar>
-                        <Title text="{i18n>itemText}" />
-                        <ToolbarSpacer />
-                        <Button text="{i18n>addWipOut}" icon="sap-icon://sys-add" press="onAddItem" />
-                    </OverflowToolbar>
-                </headerToolbar>
-                <columns>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>wipout}" wrapping="" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>ordine}" wrapping="false" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>materiale}" wrapping="false" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>descrMateriale}" wrapping="false" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="Icona" wrapping="false" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>stato}" wrapping="false" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>centroLavoro}" wrapping="false" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>quantita}" wrapping="false" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>um}" wrapping="false" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>rimuovi}" wrapping="false" />
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem>
-                        <cells>
-                            <Input id="wip-out" key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp"/>
-                            <ObjectIdentifier text="{items>AUFNR}" />
-                            <ObjectIdentifier text="{items>MATNR}" />
-                            <ObjectIdentifier text="{items>MAKTX}" />
-                            <ObjectIdentifier text="{items>STATO_COLLAUDO}" />
-                            <ObjectIdentifier text="{items>STATO_COLORE}" />
-                            <ObjectIdentifier text="{items>ARBPL}" />
-                            <ObjectIdentifier text="{items>MENGE}" />
-                            <ObjectIdentifier text="{items>MEINS}" />
-                            <Button icon="sap-icon://delete" press="onDeleteItem" type="Reject" />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-        </f:content> -->
-    <!-- DynamicPage Footer -->
-    <!-- <f:footer>
-            <OverflowToolbar>
-                <ToolbarSpacer />
-                <Button type="Accept" text="{i18n>salva}" />
-                <Button type="Reject" text="{i18n>cancela}" />
-            </OverflowToolbar>
-        </f:footer>  -->
-    <!-- </f:DynamicPage> -->
-
     <form:SimpleForm busy="{mainModel>/trasferBusy}" columnsXL="3" columnsL="2" columnsM="1" layout="ColumnLayout" labelSpanXL="3" labelSpanL="3" labelSpan="3">
         <form:toolbar>
             <Toolbar>
@@ -103,7 +6,7 @@
             </Toolbar>
         </form:toolbar>
         <Label text="{i18n>navetteNr}"/>
-        <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" change="getNavettaList"/>
+        <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" change="getNavettaList" />
     </form:SimpleForm>
 
     <Table id="table" items="{items>/}" visible="true">
@@ -149,7 +52,7 @@
         <items>
             <ColumnListItem>
                 <cells>
-                    <Input id="wip-out" key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp" />
+                    <Input key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp"  submit="onWipSubmit"/>
                     <ObjectIdentifier text="{items>AUFNR}" />
                     <ObjectIdentifier text="{items>MATNR}" />
                     <ObjectIdentifier text="{items>MAKTX}" />

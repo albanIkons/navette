@@ -56,6 +56,7 @@ sap.ui.define([
             onSaveNavetta: function () {
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
                 const oNavnum = this.getView().byId("navetteIdCreate").getValue();
+                const that = this;
 
                 const requestBody = {//Create the structure fo deep entity
                     NAVNUM: (oNavnum == "") ? '&&' : oNavnum, //Header
@@ -83,6 +84,7 @@ sap.ui.define([
                 //Call the deep entity
                 this.getView().getModel().create("/update_navettaSet", requestBody, {
                     success: function (oData) {
+                        that.onCloseDialog();
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
                             MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("updateSuccess") + oNavnum);
                         } else {
@@ -128,12 +130,20 @@ sap.ui.define([
             //Get the already saved navetta
             getNavettaList: function () {
                 const that = this;
+                const oNavetta = this.getView().byId("navetteIdCreate").getValue();
+                const aFilter = new Filter('NAVNUM', FilterOperator.EQ, oNavetta);
+                const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
 
                 this.getView().getModel().read("/dati_navettaSet", {
+                    filters: [aFilter],
                     success: function (oData) {
+                        //Clear the model and insert new wip-out
+                        const oModel = that.getView().getModel("items");
+                        oModel.setData(null);
+                        that._setModel(oData.results, "items");//Function to update the model	
                     },
                     error: function (err) {
-                        console.log(err);
+                        MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noNavetta"));
                     }
                 });
             },
@@ -242,21 +252,29 @@ sap.ui.define([
                 if (!oSelectedItem) return;
                 const oWipOut = oSelectedItem.getTitle();
                 //Call the wip out details
-                this.onInsertWip(oWipOut);
+                this.onInsertWip(oWipOut, '');
             },
             //Wip Out Help
 
+            onWipSubmit: function (oEvent) {
+                const oWipOut = oEvent.getParameters().value;
+                const oIndex = oEvent.getSource().getBindingContext("items").getObject().index;
+                this.SelectedIndex = oIndex;
+                //Call the wip out details
+                this.onInsertWip(oWipOut, oIndex);
+            },
+
             //Function to handle new wip insertion
-            onInsertWip: function (iWipOut) {
+            onInsertWip: function (iWipOut, iIndex) {
                 const that = this;
-                // const oLgort = this.checkFieldSplit(this.byId("arrivo__").getValue())
+                // const oLgort = this.checkFieldSplit(this.byId("arrivo__").getValue());
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
                 // const aFilter = new Filter({
                 //     filters: [new Filter('WIP_OUT', FilterOperator.EQ, iWipOut),
                 //               new Filter('LGORT', FilterOperator.EQ, oLgort)]
                 // })
                 const aFilter = new Filter('WIP_OUT', FilterOperator.EQ, iWipOut);
-                var oCheckWip = this.checkExistingWip(iWipOut);
+                var oCheckWip = this.checkExistingWip(iWipOut, iIndex);
 
                 if (!oCheckWip) {//Add wip only in case is not already used
                     this.getView().getModel().read("/get_wipdataSet", {
@@ -326,10 +344,10 @@ sap.ui.define([
             },
 
             //Function to check if the wip number already exists
-            checkExistingWip: function (iValue) {
+            checkExistingWip: function (iValue, iIndex) {
                 var oItems = this.getView().getModel("items").getData();//Get the values for our model and save it in a variable
                 for (var i = 0; i < oItems.length; i++) {
-                    if (oItems[i].WIP_OUT === iValue) {
+                    if (oItems[i].WIP_OUT === iValue && oItems[i].index !== iIndex ) {//return true if wip out exist and is not located in the same index
                         return true;
                     }
                 }
