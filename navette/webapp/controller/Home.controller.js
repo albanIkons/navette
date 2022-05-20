@@ -49,7 +49,14 @@ sap.ui.define([
 
             //******************************************CREAZIONE NAVETTA**************************************************************************//
             onSavePopUp: function () {
-                this._getDialog().open();//Call the dialog to insert magazzino and date
+                const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
+                var oItemsChecked = this.checkItems(oItems);
+
+                if(oItemsChecked.length > 0){//Controll if we have at least one wip out inserted
+                    this._getDialog().open();//Call the dialog to insert magazzino and date
+                } else {
+                    MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noItems"));//error no wip outs inserted
+                }
             },
 
             //Save or update the navetta
@@ -84,21 +91,28 @@ sap.ui.define([
                 //Call the deep entity
                 this.getView().getModel().create("/update_navettaSet", requestBody, {
                     success: function (oData) {
+                        const oModel = that.getView().getModel("items");
                         that.onCloseDialog();
+                        oModel.setData(null);
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
-                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("updateSuccess") + oNavnum);
+                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("updateSuccess") + oNavnum);//Sucessful update
                         } else {
-                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("createSuccess") + oData[0].NAVNUM);
+                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("createSuccess") + oData.navettatowip.results[0].NAVNUM);//Sucessful creation
                         }
                     },
                     error: function (err) {
                         if (oNavnum) {
-                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("updateError"));
+                            MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("updateError"));//error update
                         } else {
-                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("createError"));
+                            MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("createError"));//error creation
                         }
                     }
                 });
+
+                //Clear pop up input fields
+                sap.ui.getCore().byId("partenza").setValue("");
+                sap.ui.getCore().byId("arrivo__").setValue("");
+                sap.ui.getCore().byId("creazione").setValue("");
             },
 
             //Dialog before save
@@ -282,15 +296,19 @@ sap.ui.define([
                         success: function (oData) {
                             if (oData.results.length === 1) {
                                 for (var i = 0; i < oItems.length; i++) {//Change the selected index
-                                    if (oItems[i].index === that.SelectedIndex) {
-                                        oItems[i] = oData.results[0];
-                                        oItems[i].index = that.SelectedIndex;
-                                        that._setModel(oItems, "items");//Function to update the model	
-                                        break;
+                                    if (oData.results[0].MESSAGE === "") {
+                                        if (oItems[i].index === that.SelectedIndex) {
+                                            oItems[i] = oData.results[0];
+                                            oItems[i].index = that.SelectedIndex;
+                                            that._setModel(oItems, "items");//Function to update the model	
+                                            break;
+                                        }
+                                    } else {
+                                        MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("wipoutUsed"));//Wip out already used
                                     }
                                 }
                             } else {
-                                MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noWipout"));
+                                MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noWipout"));//No wip out found
                             }
                         },
                         error: function (err) {
@@ -298,7 +316,7 @@ sap.ui.define([
                         }
                     });
                 } else {
-                    MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("existingWip"));
+                    MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("existingWip"));//Wip already inserted
                 }
 
             },
@@ -347,12 +365,24 @@ sap.ui.define([
             checkExistingWip: function (iValue, iIndex) {
                 var oItems = this.getView().getModel("items").getData();//Get the values for our model and save it in a variable
                 for (var i = 0; i < oItems.length; i++) {
-                    if (oItems[i].WIP_OUT === iValue && oItems[i].index !== iIndex ) {//return true if wip out exist and is not located in the same index
+                    if (oItems[i].WIP_OUT === iValue && oItems[i].index !== iIndex) {//return true if wip out exist and is not located in the same index
                         return true;
                     }
                 }
                 return false;
             },
+
+            //Check the inserted wip outs
+            checkItems: function (iItems) {
+
+            },
+
+            // //Insert save status meaning that the wip out is ready to be saved
+            // onSaveStatusUpdate: function (iItems) {
+            //     for(var i = 0; i < iItems.length; i++){
+            //         iItems[i].saveStatus = true
+            //     }
+            // },
 
             //Hide or shoe footer if we are on the creation tab
             _showFooter: function (iBool) {

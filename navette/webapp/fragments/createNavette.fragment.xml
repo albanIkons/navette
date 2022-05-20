@@ -6,7 +6,7 @@
             </Toolbar>
         </form:toolbar>
         <Label text="{i18n>navetteNr}"/>
-        <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" change="getNavettaList" />
+        <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaList" />
     </form:SimpleForm>
 
     <Table id="table" items="{items>/}" visible="true">
