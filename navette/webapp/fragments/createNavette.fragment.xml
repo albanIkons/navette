@@ -1,15 +1,12 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:t="sap.ui.table" xmlns:form="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:b="sap.uxap" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar" xmlns:vm="sap.ui.comp.variants">
-    <f:DynamicPage id="dynamicPageId" showFooter="true">
-        <f:header>
-            <f:DynamicPageHeader pinnable="false">
-                <f:content>
-                    <fb:FilterBar id="filterbar" useToolbar="false" showGoOnFB="true" showFilterConfiguration="false" search="onGo">
-                        <fb:filterItems>
-                            <!-- <fb:FilterItem name="A" label="{i18n>navetta}">
-                                <fb:control>
+        <VBox>
+            <fb:FilterBar id="filterbar" useToolbar="false" showGoOnFB="true" showFilterConfiguration="false" search="onGo">
+                <fb:filterItems>
+                    <!-- <fb:FilterItem name="A" label="{i18n>navetta}">
+                        <fb:control>
                                     <Input type="Text" id="navetta" change="onChange" showValueHelp="true" valueHelpRequest=".oHeaderFilterHelp" required="true" />
                                 </fb:control>
-                            </fb:FilterItem> -->
+                        </fb:FilterItem> -->
                             <fb:FilterItem name="B" label="{i18n>partenza}">
                                 <fb:control>
                                     <Input type="Text" id="partenza" change="onChange" showValueHelp="true" valueHelpRequest=".oHeaderFilterHelp" required="true" />
@@ -24,15 +21,10 @@
                                 <fb:control>
                                     <DatePicker id="creazione" placeholder="Enter Date" change="handleChange" class="sapUiSmallMarginBottom" required="true" />
                                 </fb:control>
-                            </fb:FilterItem>
-                        </fb:filterItems>
-                    </fb:FilterBar>
-                </f:content>
-            </f:DynamicPageHeader>
-        </f:header>
+                    </fb:FilterItem>
+                </fb:filterItems>
+            </fb:FilterBar>
 
-        <!-- DynamicPage Content -->
-        <f:content>
             <Table id="table" items="{items>/}" visible="false">
                 <headerToolbar>
                     <OverflowToolbar>
@@ -90,14 +82,5 @@
                     </ColumnListItem>
                 </items>
             </Table>
-        </f:content>
-         <!-- DynamicPage Footer -->
-        <f:footer>
-            <OverflowToolbar>
-                <ToolbarSpacer />
-                <Button type="Accept" text="{i18n>salva}" />
-                <Button type="Reject" text="{i18n>cancela}" />
-            </OverflowToolbar>
-        </f:footer> 
-    </f:DynamicPage>
+    </VBox>
 </core:FragmentDefinition>
