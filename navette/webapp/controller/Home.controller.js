@@ -52,11 +52,11 @@ sap.ui.define([
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
                 var oItemsChecked = this.checkItems(oItems);
 
-                if(oItemsChecked.length > 0){//Controll if we have at least one wip out inserted
+                // if(oItemsChecked.length > 0){//Controll if we have at least one wip out inserted
                     this._getDialog().open();//Call the dialog to insert magazzino and date
-                } else {
-                    MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noItems"));//error no wip outs inserted
-                }
+                // } else {
+                //     MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noItems"));//error no wip outs inserted
+                // }
             },
 
             //Save or update the navetta
