@@ -4,18 +4,24 @@ sap.ui.define([], function () {
         iconaColor: function (sIcona) {
             if (sIcona == "@08@") {
                 return "green";
-            } else if (sIcona == "") {
-                return "";
             } else {
                 return "red";
             }
         },
 
         icona: function (sIcona) {
-            if (sIcona == "") {
-                return "";
+            if (sIcona == "NI" ) {
+                 return "";
             } else {
-                return "sap-icon://status-negative";
+                return "sap-icon://status-negative"; 
+            }
+        },
+
+        iconaColl: function (sIcona) {
+            if (sIcona == "NI" ) {
+                 return "";
+            } else {
+                return "sap-icon://status-negative"; 
             }
         },
 

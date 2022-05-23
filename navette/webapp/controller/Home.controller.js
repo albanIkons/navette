@@ -13,9 +13,14 @@ sap.ui.define([
     function (Controller, MessageBox, JSONModel, Fragment, Filter, FilterOperator, formatter) {
         "use strict";
 
+        var oMagazzinoArrivo;
+        var oMagazzinoPartenza;
+        var oMagazzinoData;
+
         return Controller.extend("npmnavette.navette.controller.Home", {
             formatter: formatter,
             onInit: function () {
+                this._viewKey = 'create';
                 // Main Model to controll view (bussy status etc)
                 const oMainModel = {
                     trasferBusy: false,
@@ -29,8 +34,8 @@ sap.ui.define([
                     'index': 1,
                     'ARBPL': "",
                     'AUFNR': "",
-                    'ICONA_COLLAUDO': "",
-                    'ICONA_COLORE': "",
+                    'ICONA_COLLAUDO': "NI",
+                    'ICONA_COLORE': "NI",
                     'LGORT': "",
                     'MAKTX': "",
                     'MATNR': "",
@@ -50,13 +55,26 @@ sap.ui.define([
             //******************************************CREAZIONE NAVETTA**************************************************************************//
             onSavePopUp: function () {
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
-                var oItemsChecked = this.checkItems(oItems);
+                const oItemsChecked = this.checkItems(oItems);
+                const oNavnum = this.getView().byId("navetteIdCreate").getValue();
 
                 // if(oItemsChecked.length > 0){//Controll if we have at least one wip out inserted
-                    this._getDialog().open();//Call the dialog to insert magazzino and date
+                this._getDialog().open();//Call the dialog to insert magazzino and date
                 // } else {
                 //     MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noItems"));//error no wip outs inserted
                 // }
+
+                //Set the pop up values in case of update
+                if (oNavnum) {
+                    sap.ui.getCore().byId("partenza").setValue(oMagazzinoPartenza);
+                    sap.ui.getCore().byId("arrivo__").setValue(oMagazzinoArrivo);
+                    sap.ui.getCore().byId("creazione").setValue(oMagazzinoData);
+                } else {
+                    //Clear pop up input fields
+                    sap.ui.getCore().byId("partenza").setValue("");
+                    sap.ui.getCore().byId("arrivo__").setValue("");
+                    sap.ui.getCore().byId("creazione").setValue("");
+                }
             },
 
             //Save or update the navetta
@@ -64,6 +82,7 @@ sap.ui.define([
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
                 const oNavnum = this.getView().byId("navetteIdCreate").getValue();
                 const that = this;
+                const oModel = that.getView().getModel("items");
 
                 const requestBody = {//Create the structure fo deep entity
                     NAVNUM: (oNavnum == "") ? '&&' : oNavnum, //Header
@@ -91,7 +110,6 @@ sap.ui.define([
                 //Call the deep entity
                 this.getView().getModel().create("/update_navettaSet", requestBody, {
                     success: function (oData) {
-                        const oModel = that.getView().getModel("items");
                         that.onCloseDialog();
                         oModel.setData(null);
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
@@ -101,6 +119,8 @@ sap.ui.define([
                         }
                     },
                     error: function (err) {
+                        that.onCloseDialog();
+                        oModel.setData(null);
                         if (oNavnum) {
                             MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("updateError"));//error update
                         } else {
@@ -155,6 +175,11 @@ sap.ui.define([
                         const oModel = that.getView().getModel("items");
                         oModel.setData(null);
                         that._setModel(oData.results, "items");//Function to update the model	
+
+                        //Save the pop up values for update navetta
+                        oMagazzinoArrivo = oData.results[0].LGORT;
+                        oMagazzinoPartenza = oData.results[0].UMLGO;
+                        oMagazzinoData = oData.results[0].ERDAT;
                     },
                     error: function (err) {
                         MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noNavetta"));
@@ -221,7 +246,9 @@ sap.ui.define([
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
 
-                this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
+                if (this._viewKey === 'create') {
+                    this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
+                }
 
                 this.getView().getModel().read("/get_wipSet", {
                     success: function (oData) {
@@ -262,20 +289,27 @@ sap.ui.define([
             onHelpCloseWipout: function (oEvent) {
                 const oSelectedItem = oEvent.getParameter("selectedItem");
                 oEvent.getSource().getBinding("items").filter([]);
-
-                if (!oSelectedItem) return;
                 const oWipOut = oSelectedItem.getTitle();
-                //Call the wip out details
-                this.onInsertWip(oWipOut, '');
+
+                if (this._viewKey === 'create') { // Do this logic only in creation page
+                    if (!oSelectedItem) return;
+                    //Call the wip out details
+                    this.onInsertWip(oWipOut, '');
+
+                } else { // For recieve page ----------------------------------------------
+                    const oWipInput = this.byId("recieveWipOutId");
+                    oWipInput.setValue(this.checkFieldSplit(oWipOut));
+                }
             },
             //Wip Out Help
-
             onWipSubmit: function (oEvent) {
-                const oWipOut = oEvent.getParameters().value;
-                const oIndex = oEvent.getSource().getBindingContext("items").getObject().index;
-                this.SelectedIndex = oIndex;
-                //Call the wip out details
-                this.onInsertWip(oWipOut, oIndex);
+                if (this._viewKey === 'create') { // Do this logic only in creation page
+                    const oWipOut = oEvent.getParameters().value;
+                    const oIndex = oEvent.getSource().getBindingContext("items").getObject().index;
+                    this.SelectedIndex = oIndex;
+                    //Call the wip out details
+                    this.onInsertWip(oWipOut, oIndex);
+                }
             },
 
             //Function to handle new wip insertion
@@ -327,24 +361,47 @@ sap.ui.define([
                 this.Index = this.Index + 1; //We increment our index by 1 every time we add a new item
 
                 //We add an empty row to our table model
-                oItems.push({
-                    'index': this.Index,
-                    'ARBPL': "",
-                    'AUFNR': "",
-                    'ICONA_COLLAUDO': "",
-                    'ICONA_COLORE': "",
-                    'LGORT': "",
-                    'MAKTX': "",
-                    'MATNR': "",
-                    'MEINS': "",
-                    'MENGE': "",
-                    'MESSAGE': "",
-                    'NAVNUM': "",
-                    'STATO_COLLAUDO': "",
-                    'STATO_COLORE': "",
-                    'WIP_OUT': ""
-                });
-                this._setModel(oItems, "items");//Function to update the model
+                if (oItems === null) {
+                    var oItemData = [{
+                        'index': 1,
+                        'ARBPL': "",
+                        'AUFNR': "",
+                        'ICONA_COLLAUDO': "NI",
+                        'ICONA_COLORE': "NI",
+                        'LGORT': "",
+                        'MAKTX': "",
+                        'MATNR': "",
+                        'MEINS': "",
+                        'MENGE': "",
+                        'MESSAGE': "",
+                        'NAVNUM': "",
+                        'STATO_COLLAUDO': "",
+                        'STATO_COLORE': "",
+                        'WIP_OUT': ""
+                    }];
+                    this.Index = 1;
+                    this._setModel(oItemData, "items");//Function to update the model
+                } else {
+                    oItems.push({
+                        'index': this.Index,
+                        'ARBPL': "",
+                        'AUFNR': "",
+                        'ICONA_COLLAUDO': "NI",
+                        'ICONA_COLORE': "NI",
+                        'LGORT': "",
+                        'MAKTX': "",
+                        'MATNR': "",
+                        'MEINS': "",
+                        'MENGE': "",
+                        'MESSAGE': "",
+                        'NAVNUM': "",
+                        'STATO_COLLAUDO': "",
+                        'STATO_COLORE': "",
+                        'WIP_OUT': ""
+                    });
+                    this._setModel(oItems, "items");//Function to update the model
+                }
+
             },
 
             //Function to remove an item
@@ -395,6 +452,7 @@ sap.ui.define([
             //Get the selected filter tab
             onIconTabBarSelect: function (oEvent) {
                 const oKey = oEvent.getParameter("key");
+                this._viewKey = oKey;
                 if (oKey == "create") {
                     this._showFooter(true);
                 } else {
@@ -485,9 +543,26 @@ sap.ui.define([
 
             // Make request on BE to Transfer selected Navette
             trasferNavette: function (NavetteNr, MainModel) {
-                MessageBox.success(`This Number: "${NavetteNr}" will be sent to backend`);
-                this.byId("navetteId").setValue(""); // Clear input Field
-                MainModel.setProperty("/trasferBusy", false);
+                const that = this;
+                const oModel = that.getView().getModel();
+                const oTransfer = { NAVNUM: NavetteNr };
+
+                oModel.create("/trasf_navettaSet", oTransfer, {
+                    success: function (oData) {
+                        MessageBox.alert(oData.MESSAGE);
+                        that.byId("navetteId").setValue(""); // Clear input Field
+                        MainModel.setProperty("/trasferBusy", false);
+                    },
+                    error: function (err) {
+                        try {
+                            const errorJson = JSON.parse(err.responseText);
+                            MessageBox.error(errorJson.error.message.value);
+                        } catch (e) {
+                            MessageBox.error(err.message);
+                        }
+                        MainModel.setProperty("/trasferBusy", false);
+                    }
+                });
             },
             //********************************************RICEZIONE NAVETTA*************************************************************************//              
 
@@ -496,26 +571,46 @@ sap.ui.define([
                 const that = this;
                 const oWarningMsg = this._geti18n("transferWarning");
                 const oNavetteNr = this.byId("recNavetteId").getValue();
+                const oWipInput = this.byId("recieveWipOutId").getValue();
                 const oMainModel = this.getView().getModel("mainModel");
 
                 // Check that Navette number is not empty
                 if (oNavetteNr === "") {
                     MessageBox.warning(oWarningMsg);
                 } else {  // Make request to BE
-                    that.receiveWipOut(oNavetteNr, oMainModel);
+                    that.receiveWipOut(oNavetteNr, oWipInput, oMainModel);
                 }
             },
 
-            // Get List of WIP Outs
-            receiveWipOut: function (NavetteNr, MainModel) {
-                const modelNew = new JSONModel("../jsonTest/dummy.json");
-                MainModel.setProperty("/receiveBusy", true);
+            // Recieve navete nr & wip-out message ------------------------------------------------
+            receiveWipOut: function (NavetteNr, WipInput, MainModel) {
+                const that = this;
+                const oModel = that.getView().getModel();
+                const oRecModel = this.getView().getModel("wipOutList");
+                var oRecData = [];
+                var oRecieve = {};
+                oRecieve.NAVNUM = NavetteNr;
+                oRecieve.WIP_OUT = WipInput;
 
-                // Just for test to see how data will be displayed with trafic lights
-                setTimeout(() => {
-                    this.getView().setModel(modelNew, "wipOutList");
-                    MainModel.setProperty("/receiveBusy", false);
-                }, 2500);
+                if (typeof oRecModel !== 'undefined') oRecData = oRecModel.getData();
+
+                MainModel.setProperty("/receiveBusy", true);
+                oModel.create("/ricevi_navettaSet", oRecieve, {
+                    success: function (oData) {
+                        oRecData.push(oData);
+                        that.getView().setModel(new JSONModel(oRecData), "wipOutList");
+                        MainModel.setProperty("/receiveBusy", false);
+                    },
+                    error: function (err) {
+                        try {
+                            const errorJson = JSON.parse(err.responseText);
+                            MessageBox.error(errorJson.error.message.value);
+                        } catch (e) {
+                            MessageBox.error(err.message);
+                        }
+                        MainModel.setProperty("/receiveBusy", false);
+                    }
+                });
             },
 
             //Split the input fields

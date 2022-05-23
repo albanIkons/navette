@@ -20,8 +20,11 @@
                     <Button icon="sap-icon://trend-up" text="GO" press="onReceivePress"/>
                 </Toolbar>
             </form:toolbar>
-            <Label text="{i18n>navetteNr}" required="true"/>
+            <Label text="{i18n>navetteNr}" required="false"/>
             <Input id="recNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
+
+            <Label text="{i18n>wipout}" required="false"/>
+                <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit"/>
         </form:SimpleForm>
 
         <Table id="wipOutTableId" items="{wipOutList>/}">
@@ -32,34 +35,26 @@
             </headerToolbar> -->
             <columns>
                 <Column minScreenWidth="Tablet" demandPopin="true">
-                    <Text text="Column 1" wrapping="" />
+                    <Text text="Navette" wrapping="" />
                 </Column>
                 <Column minScreenWidth="Tablet" demandPopin="true">
-                    <Text text="Column 2" wrapping="false" />
+                    <Text text="Wip Out" wrapping="false" />
                 </Column>
                 <Column minScreenWidth="Tablet" demandPopin="true">
-                    <Text text="Column 3" wrapping="false" />
-                </Column>
-                <Column minScreenWidth="Tablet" demandPopin="true">
-                    <Text text="Column 4" wrapping="false" />
-                </Column>
-                <Column minScreenWidth="Tablet" demandPopin="true">
-                    <Text text="Column 5" wrapping="false" />
+                    <Text text="Message" wrapping="false" />
                 </Column>
             </columns>
             <items>
                 <ColumnListItem>
-                    <customData>
+                    <!-- <customData>
                         <core:CustomData key="mydata" 
                         value="{wipOutList>col5}" 
                         writeToDom="true"></core:CustomData>
-                    </customData>
+                    </customData> -->
                     <cells>
-                        <ObjectIdentifier text="{wipOutList>col1}" />
-                        <ObjectIdentifier text="{wipOutList>col2}" />
-                        <ObjectIdentifier text="{wipOutList>col3}" />
-                        <ObjectIdentifier text="{wipOutList>col4}" />
-                        <ObjectIdentifier text="{wipOutList>col5}" />
+                        <ObjectIdentifier text="{wipOutList>NAVNUM}" />
+                        <ObjectIdentifier text="{wipOutList>WIP_OUT}" />
+                        <ObjectIdentifier text="{wipOutList>MESSAGE}" />
                     </cells>
                 </ColumnListItem>
             </items>
