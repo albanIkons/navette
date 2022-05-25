@@ -314,8 +314,8 @@ sap.ui.define([
                     success: function (oData) {
                         that.getView().setModel(new JSONModel(oData.results), "navetteHelp");
 
-                        if (!that._pValueHelpWipOutDialog) {
-                            that._pValueHelpWipOutDialog = Fragment.load({
+                        if (!that._pValueHelpNavetteDialog) {
+                            that._pValueHelpNavetteDialog = Fragment.load({
                                 id: oView.getId(),
                                 name: "npmnavette.navette.fragments.navetteHelp",
                                 controller: that
@@ -324,7 +324,7 @@ sap.ui.define([
                                 return oDialog;
                             });
                         }
-                        that._pValueHelpWipOutDialog.then(function (oDialog) {
+                        that._pValueHelpNavetteDialog.then(function (oDialog) {
                             // Create a filter for the binding
                             oDialog.getBinding("items").filter([
                                 new Filter("NAVNUM", FilterOperator.Contains, sInputValue)
