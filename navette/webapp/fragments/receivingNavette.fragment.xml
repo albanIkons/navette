@@ -17,7 +17,7 @@
                 <Toolbar >
                     <Title text="{i18n>riceviNavette}"/>
                     <ToolbarSpacer />
-                    <Button icon="sap-icon://trend-up" text="GO" press="onReceivePress"/>
+                    <Button icon="sap-icon://trend-up" text="{i18n>esegui}" press="onReceivePress"/>
                 </Toolbar>
             </form:toolbar>
             <Label text="{i18n>navetteNr}" required="false"/>

@@ -21,7 +21,7 @@ sap.ui.define([
             formatter: formatter,
             onInit: function () {
 
-                this._viewKey = 'create'; 
+                this._viewKey = 'create';
                 // Main Model to controll view (bussy status etc)
                 const oMainModel = {
                     trasferBusy: false,
@@ -247,7 +247,7 @@ sap.ui.define([
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
 
-                if(this._viewKey === 'create'){
+                if (this._viewKey === 'create') {
                     this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
                 }
 
@@ -292,19 +292,73 @@ sap.ui.define([
                 oEvent.getSource().getBinding("items").filter([]);
                 const oWipOut = oSelectedItem.getTitle();
 
-                if(this._viewKey === 'create') { // Do this logic only in creation page
+                if (this._viewKey === 'create') { // Do this logic only in creation page
                     if (!oSelectedItem) return;
                     //Call the wip out details
                     this.onInsertWip(oWipOut, '');
 
-                }else{ // For recieve page ----------------------------------------------
+                } else { // For recieve page ----------------------------------------------
                     const oWipInput = this.byId("recieveWipOutId");
                     oWipInput.setValue(this.checkFieldSplit(oWipOut));
                 }
             },
             //Wip Out Help
+
+            //Navette Help
+            onNavetteHelp: function (oEvent) {
+                const that = this;
+                const oView = this.getView();
+                const sInputValue = oEvent.getSource().getValue();
+
+                this.getView().getModel().read("/get_navnumSet", {
+                    success: function (oData) {
+                        that.getView().setModel(new JSONModel(oData.results), "navetteHelp");
+
+                        if (!that._pValueHelpWipOutDialog) {
+                            that._pValueHelpWipOutDialog = Fragment.load({
+                                id: oView.getId(),
+                                name: "npmnavette.navette.fragments.navetteHelp",
+                                controller: that
+                            }).then(function (oDialog) {
+                                oView.addDependent(oDialog);
+                                return oDialog;
+                            });
+                        }
+                        that._pValueHelpWipOutDialog.then(function (oDialog) {
+                            // Create a filter for the binding
+                            oDialog.getBinding("items").filter([
+                                new Filter("NAVNUM", FilterOperator.Contains, sInputValue)
+                            ]);
+                            // Open ValueHelpDialog filtered by the input's value
+                            oDialog.open(sInputValue);
+                        });
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            },
+
+            onHelpSearchNavette: function (oEvent) {
+                const sValue = oEvent.getParameter("value");
+                const oFilter = new Filter("NAVNUM", FilterOperator.Contains, sValue);
+                oEvent.getSource().getBinding("items").filter([oFilter]);
+            },
+
+            onHelpCloseNavette: function (oEvent) {
+                const oSelectedItem = oEvent.getParameter("selectedItem");
+                oEvent.getSource().getBinding("items").filter([]);
+                const oWipOut = oSelectedItem.getTitle();
+
+                const oWipInput = this.byId("navetteIdCreate");
+                oWipInput.setValue(oWipOut);
+
+            },
+            //Navette Help
+
             onWipSubmit: function (oEvent) {
-                if(this._viewKey === 'create') { // Do this logic only in creation page
+                if (this._viewKey === 'create') { // Do this logic only in creation page
 
                     const oWipOut = oEvent.getParameters().value;
                     const oIndex = oEvent.getSource().getBindingContext("items").getObject().index;
@@ -454,7 +508,7 @@ sap.ui.define([
             //Get the selected filter tab
             onIconTabBarSelect: function (oEvent) {
                 const oKey = oEvent.getParameter("key");
-                this._viewKey = oKey; 
+                this._viewKey = oKey;
                 if (oKey == "create") {
                     this._showFooter(true);
                 } else {
@@ -490,78 +544,25 @@ sap.ui.define([
                 });
             },
 
-            //Navette Help
-            onNavetteHelp: function (oEvent) {
-                const that = this;
-                const oView = this.getView();
-                const sInputValue = oEvent.getSource().getValue();
-
-                that.getView().getModel().read("/get_navnumSet", {
-                    success: function (oData) {
-                        that.getView().setModel(new JSONModel(oData.results), "navetteHelp");
-
-                        if (!that._pValueHelpNavetteDialog) {
-                            that._pValueHelpNavetteDialog = Fragment.load({
-                                id: oView.getId(),
-                                name: "npmnavette.navette.fragments.navetteHelp",
-                                controller: that
-                            }).then(function (oDialog) {
-                                oView.addDependent(oDialog);
-                                return oDialog;
-                            });
-                        }
-                        that._pValueHelpNavetteDialog.then(function (oDialog) {
-                            // Create a filter for the binding
-                            oDialog.getBinding("items").filter([
-                                new Filter("NAVNUM", FilterOperator.Contains, sInputValue)
-                            ]);
-                            // Open ValueHelpDialog filtered by the input's value
-                            oDialog.open(sInputValue);
-                        });
-
-                    },
-                    error: function (err) {
-                        console.log(err);
-                    }
-                });
-            },
-
-            onHelpSearchNavette: function (oEvent) {
-                const sValue = oEvent.getParameter("value");
-                const oFilter = new Filter("LGORT", FilterOperator.Contains, sValue);
-                oEvent.getSource().getBinding("items").filter([oFilter]);
-            },
-
-            onHelpCloseNavette: function (oEvent) {
-                const oSelectedItem = oEvent.getParameter("selectedItem");
-                oEvent.getSource().getBinding("items").filter([]);
-
-                if (!oSelectedItem) return;
-                const oMagazzino = `${oSelectedItem.getTitle()} - ${oSelectedItem.getDescription()}`;
-                // Set selected key values to input field------------------------------------------
-                this.byId(this.MagazzinoId).setValue(oMagazzino);
-            },
-            //Navette Help
-
             // Make request on BE to Transfer selected Navette
             trasferNavette: function (NavetteNr, MainModel) {
                 const that = this;
                 const oModel = that.getView().getModel();
-                const oTransfer = { NAVNUM : NavetteNr};
-                
+                const oTransfer = { NAVNUM: NavetteNr };
+
                 oModel.create("/trasf_navettaSet", oTransfer, {
-                    success: function (oData){
-                        MessageBox.alert(oData.MESSAGE);  
+                    success: function (oData) {
+                        MessageBox.alert(oData.MESSAGE);
                         that.byId("navetteId").setValue(""); // Clear input Field
                         MainModel.setProperty("/trasferBusy", false);
                     },
-                    error: function(err){
+                    error: function (err) {
                         try {
                             const errorJson = JSON.parse(err.responseText);
-                            MessageBox.error(errorJson.error.message.value);    
-                        }catch (e){
-                            MessageBox.error(err.message);    
-                        } 
+                            MessageBox.error(errorJson.error.message.value);
+                        } catch (e) {
+                            MessageBox.error(err.message);
+                        }
                         MainModel.setProperty("/trasferBusy", false);
                     }
                 });
@@ -570,11 +571,11 @@ sap.ui.define([
 
             // Event handler for Receiving Navetta press 
             onReceivePress: function () {
-                const that        = this;
+                const that = this;
                 const oWarningMsg = this._geti18n("transferWarning");
-                const oNavetteNr  = this.byId("recNavetteId").getValue();
-                const oWipInput   = this.byId("recieveWipOutId").getValue();
-                const oMainModel  = this.getView().getModel("mainModel");
+                const oNavetteNr = this.byId("recNavetteId").getValue();
+                const oWipInput = this.byId("recieveWipOutId").getValue();
+                const oMainModel = this.getView().getModel("mainModel");
 
 
                 // Check that Navette number is not empty

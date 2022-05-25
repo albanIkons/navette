@@ -17,7 +17,7 @@
             <Toolbar >
                 <Title text="{i18n>transferNavette}"/>
                 <ToolbarSpacer />
-                <Button icon="sap-icon://trend-up" text="GO" press="onTransferPress"/>
+                <Button icon="sap-icon://trend-up" text="{i18n>esegui}" press="onTransferPress"/>
             </Toolbar>
         </form:toolbar>
         <Label text="{i18n>navetteNr}" required="true"/>
