@@ -1,0 +1,12 @@
+{
+    "base": "./dist",
+    "conn_usestrictssl" : false,
+    "conn_server": "http://srvvlxfid.vulcaflex.locale:8040/",  
+    "conn_client" : "300",  
+    "conn_user": "VXFIORI",    
+    "conn_password": "Vulca2022x",
+    "abap_package": "Z001",
+    "abap_bsp": "ZNAVETTE",
+    "abap_bsp_text": "NAVETTE",
+    "abap_transport" : "FIDK900032"
+}
