@@ -21,7 +21,7 @@
             </Toolbar>
         </form:toolbar>
         <Label text="{i18n>navetteNr}" required="true"/>
-        <Input id="navetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
+        <Input id="transferNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
     </form:SimpleForm>
 
 </core:FragmentDefinition>

@@ -1,9 +1,9 @@
 <mvc:View controllerName="npmnavette.navette.controller.Home" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m" xmlns:f="sap.f" xmlns:html="http://www.w3.org/1999/xhtml">
     <html:style>
-    tr[data-mydata="GREEN"] td:nth-child(6) {
+    tr[data-mydata="1"] td:nth-child(6) {
         background:  #ABE2AB!important;
     }
-    tr[data-mydata="RED"] td:nth-child(6) {
+    tr[data-mydata="0"] td:nth-child(6) {
         background:  #FF8888!important;
     }
 </html:style>

@@ -20,10 +20,10 @@
                     <Button icon="sap-icon://trend-up" text="{i18n>esegui}" press="onReceivePress"/>
                 </Toolbar>
             </form:toolbar>
-            <Label text="{i18n>navetteNr}" required="false"/>
+            <Label text="{i18n>navetteNr}" required="true"/>
             <Input id="recNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
 
-            <Label text="{i18n>wipout}" required="false"/>
+            <Label text="{i18n>wipout}" required="true"/>
                 <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit"/>
         </form:SimpleForm>
 
@@ -48,7 +48,7 @@
                 <ColumnListItem>
                     <!-- <customData>
                         <core:CustomData key="mydata" 
-                        value="{wipOutList>col5}" 
+                        value="{wipOutList>RCODE}" 
                         writeToDom="true"></core:CustomData>
                     </customData> -->
                     <cells>

@@ -299,7 +299,7 @@ sap.ui.define([
 
                 } else { // For recieve page ----------------------------------------------
                     const oWipInput = this.byId("recieveWipOutId");
-                    oWipInput.setValue(this.checkFieldSplit(oWipOut));
+                    oWipInput.setValue(oWipOut);
                 }
             },
             //Wip Out Help
@@ -349,10 +349,18 @@ sap.ui.define([
             onHelpCloseNavette: function (oEvent) {
                 const oSelectedItem = oEvent.getParameter("selectedItem");
                 oEvent.getSource().getBinding("items").filter([]);
-                const oWipOut = oSelectedItem.getTitle();
+                const oNaveteNumber = oSelectedItem.getTitle();
 
-                const oWipInput = this.byId("navetteIdCreate");
-                oWipInput.setValue(oWipOut);
+                if (this._viewKey === 'create') {
+                    const oNavetteInput = this.byId("navetteIdCreate");
+                    oNavetteInput.setValue(oNaveteNumber);
+                } else  if (this._viewKey === 'transfer') {
+                    const oNavetteInput = this.byId("transferNavetteId");
+                    oNavetteInput.setValue(oNaveteNumber);
+                }else {
+                    const oNavetteInput = this.byId("recNavetteId");
+                    oNavetteInput.setValue(oNaveteNumber);
+                }
 
             },
             //Navette Help
@@ -521,7 +529,7 @@ sap.ui.define([
                 const that = this;
                 const oConfirmMsg = this._geti18n("transferConfirm");
                 const oWarningMsg = this._geti18n("transferWarning");
-                const oNavetteNr = this.byId("navetteId").getValue();
+                const oNavetteNr = this.byId("transferNavetteId").getValue();
                 const oMainModel = this.getView().getModel("mainModel");
 
                 oMainModel.setProperty("/trasferBusy", true); // Show busy loader 
@@ -552,8 +560,12 @@ sap.ui.define([
 
                 oModel.create("/trasf_navettaSet", oTransfer, {
                     success: function (oData) {
-                        MessageBox.alert(oData.MESSAGE);
-                        that.byId("navetteId").setValue(""); // Clear input Field
+                        if (oData.RCODE == 1){
+                            MessageBox.success(oData.MESSAGE);
+                        }else{
+                            MessageBox.error(oData.MESSAGE);
+                        }
+                        that.byId("transferNavetteId").setValue(""); // Clear input Field
                         MainModel.setProperty("/trasferBusy", false);
                     },
                     error: function (err) {
@@ -572,14 +584,13 @@ sap.ui.define([
             // Event handler for Receiving Navetta press 
             onReceivePress: function () {
                 const that = this;
-                const oWarningMsg = this._geti18n("transferWarning");
+                const oWarningMsg = this._geti18n("mandatory");
                 const oNavetteNr = this.byId("recNavetteId").getValue();
                 const oWipInput = this.byId("recieveWipOutId").getValue();
                 const oMainModel = this.getView().getModel("mainModel");
 
-
                 // Check that Navette number is not empty
-                if (oNavetteNr === "") {
+                if (oNavetteNr === ""  || oWipInput === "" ) {
                     MessageBox.warning(oWarningMsg);
                 } else {  // Make request to BE
                     that.receiveWipOut(oNavetteNr, oWipInput, oMainModel);
@@ -601,6 +612,7 @@ sap.ui.define([
                 MainModel.setProperty("/receiveBusy", true);
                 oModel.create("/ricevi_navettaSet", oRecieve, {
                     success: function (oData) {
+                        console.log(oData);
                         oRecData.push(oData);
                         that.getView().setModel(new JSONModel(oRecData), "wipOutList");
                         MainModel.setProperty("/receiveBusy", false);
