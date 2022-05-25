@@ -9,18 +9,19 @@
     "sapui5"
   ],
   "main": "webapp/index.html",
-  "dependencies": {},
+  "dependencies": {
+    "nwabap-ui5uploader": "^1.2.0"
+  },
   "devDependencies": {
-    "@ui5/cli": "^2.14.1",
+    "@sap/ux-ui5-fe-mockserver-middleware": "1",
     "@sap/ux-ui5-tooling": "1",
-    "@sap/ux-ui5-fe-mockserver-middleware": "1"
+    "@ui5/cli": "^2.14.1"
   },
   "scripts": {
     "start": "fiori run --open \"test/flpSandbox.html?sap-client=100&sap-ui-xx-viewCache=false#npmnavettenavette-display\"",
     "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flpSandbox.html?sap-client=100&sap-ui-xx-viewCache=false#npmnavettenavette-display\"",
     "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
-    "deploy": "fiori verify",
-    "deploy-config": "fiori add deploy-config",
+    "deploy": "npx nwabap upload",
     "start-noflp": "fiori run --open \"index.html?sap-client=100&sap-ui-xx-viewCache=false\"",
     "start-mock": "fiori run --config ./ui5-mock.yaml --open \"test/flpSandbox.html?sap-client=100&sap-ui-xx-viewCache=false#npmnavettenavette-display\"",
     "start-variants-management": "fiori run --open \"preview.html?&sap-client=100&sap-ui-xx-viewCache=false&fiori-tools-rta-mode=true&sap-ui-rta-skip-flex-validation=true#preview-app\"",
