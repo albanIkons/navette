@@ -115,9 +115,9 @@ sap.ui.define([
                         that.onCloseDialog();
                         oModel.setData(null);
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
-                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("updateSuccess") + oNavnum);//Sucessful update
+                            MessageBox.success("La navetta " + oNavnum + " e stata creata");//Sucessful update
                         } else {
-                            MessageBox.success(that.getView().getModel("i18n").getResourceBundle().getText("createSuccess") + oData.navettatowip.results[0].NAVNUM);//Sucessful creation
+                            MessageBox.success("La navetta " + oData.navettatowip.results[0].NAVNUM + " e stata aggiornata");//Sucessful update
                         }
                     },
                     error: function (err) {
@@ -355,10 +355,10 @@ sap.ui.define([
                 if (this._viewKey === 'create') {
                     const oNavetteInput = this.byId("navetteIdCreate");
                     oNavetteInput.setValue(oNaveteNumber);
-                } else  if (this._viewKey === 'transfer') {
+                } else if (this._viewKey === 'transfer') {
                     const oNavetteInput = this.byId("transferNavetteId");
                     oNavetteInput.setValue(oNaveteNumber);
-                }else {
+                } else {
                     const oNavetteInput = this.byId("recNavetteId");
                     oNavetteInput.setValue(oNaveteNumber);
                 }
@@ -366,6 +366,7 @@ sap.ui.define([
             },
             //Navette Help
 
+            //Do the get wip out logic on enter
             onWipSubmit: function (oEvent) {
                 if (this._viewKey === 'create') { // Do this logic only in creation page
 
@@ -496,15 +497,8 @@ sap.ui.define([
 
             //Check the inserted wip outs
             checkItems: function (iItems) {
-
+                //Nothing, 
             },
-
-            // //Insert save status meaning that the wip out is ready to be saved
-            // onSaveStatusUpdate: function (iItems) {
-            //     for(var i = 0; i < iItems.length; i++){
-            //         iItems[i].saveStatus = true
-            //     }
-            // },
 
             //Hide or shoe footer if we are on the creation tab
             _showFooter: function (iBool) {
@@ -523,6 +517,30 @@ sap.ui.define([
                 } else {
                     this._showFooter(false);
                 }
+            },
+
+            onClearItemModel: function () {//restore the view to the initial state
+                var oItemData = [{
+                    'index': 1,
+                    'ARBPL': "",
+                    'AUFNR': "",
+                    'ICONA_COLLAUDO': "NI",
+                    'ICONA_COLORE': "NI",
+                    'LGORT': "",
+                    'MAKTX': "",
+                    'MATNR': "",
+                    'MEINS': "",
+                    'MENGE': "",
+                    'MESSAGE': "",
+                    'NAVNUM': "",
+                    'STATO_COLLAUDO': "",
+                    'STATO_COLORE': "",
+                    'WIP_OUT': ""
+                }];
+                this.Index = 1;
+                this._setModel(oItemData, "items");//Function to update the model
+                this.getView().byId("navetteIdCreate").setValue("");
+
             },
             //********************************************TRANSFER NAVETTA*************************************************************************//            
             // Event handler for Transfer Navetta press 
@@ -561,9 +579,9 @@ sap.ui.define([
 
                 oModel.create("/trasf_navettaSet", oTransfer, {
                     success: function (oData) {
-                        if (oData.RCODE == 1){
+                        if (oData.RCODE == 1) {
                             MessageBox.success(oData.MESSAGE);
-                        }else{
+                        } else {
                             MessageBox.error(oData.MESSAGE);
                         }
                         that.byId("transferNavetteId").setValue(""); // Clear input Field
@@ -591,7 +609,7 @@ sap.ui.define([
                 const oMainModel = this.getView().getModel("mainModel");
 
                 // Check that Navette number is not empty
-                if (oNavetteNr === ""  || oWipInput === "" ) {
+                if (oNavetteNr === "" || oWipInput === "") {
                     MessageBox.warning(oWarningMsg);
                 } else {  // Make request to BE
                     that.receiveWipOut(oNavetteNr, oWipInput, oMainModel);

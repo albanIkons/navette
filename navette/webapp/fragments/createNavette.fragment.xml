@@ -15,6 +15,7 @@
                 <Title text="{i18n>itemText}" />
                 <ToolbarSpacer />
                 <Button text="{i18n>addWipOut}" icon="sap-icon://sys-add" press="onAddItem" />
+                <Button type="Reject" text="{i18n>pulisci}" icon="sap-icon://less" press="onClearItemModel" />
             </OverflowToolbar>
         </headerToolbar>
         <columns>
@@ -31,7 +32,10 @@
                 <Text text="{i18n>descrMateriale}" wrapping="false" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="Icona" wrapping="false" />
+                <Text text="{i18n>Icona}" wrapping="false" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Text text="{i18n>colore}" wrapping="false" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="Icona Collaudo" wrapping="false" />
@@ -39,9 +43,6 @@
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="Collaudo" wrapping="false" />
             </Column>
-            <!-- <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="{i18n>stato}" wrapping="false" />
-            </Column> -->
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="{i18n>centroLavoro}" wrapping="false" />
             </Column>
@@ -63,6 +64,7 @@
                     <ObjectIdentifier text="{items>MATNR}" />
                     <ObjectIdentifier text="{items>MAKTX}" />
                     <core:Icon src="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.icona'}" color="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.iconaColor'}" />
+                    <ObjectIdentifier text="{items>STATO_COLORE}" />
                     <core:Icon src="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColl'}" color="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColor'}" />
                     <ObjectIdentifier text="{items>STATO_COLLAUDO}" />
                     <ObjectIdentifier text="{items>ARBPL}" />

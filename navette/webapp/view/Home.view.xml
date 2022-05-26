@@ -38,7 +38,7 @@
                 <OverflowToolbar>
                     <ToolbarSpacer />
                     <Button type="Accept" text="{i18n>salva}" press="onSavePopUp"/>
-                    <Button type="Reject" text="{i18n>cancela}" />
+                    <!-- <Button type="Reject" text="{i18n>cancela}" /> -->
                 </OverflowToolbar>
             </footer>
         </Page>
