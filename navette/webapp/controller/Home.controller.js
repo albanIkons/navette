@@ -103,7 +103,8 @@ sap.ui.define([
                     oTempItems.ARBPL = oItems[i].ARBPL;
                     oTempItems.MENGE = oItems[i].MENGE;
                     oTempItems.MEINS = oItems[i].MEINS;
-                    oTempItems.ERDAT = new Date(sap.ui.getCore().byId("creazione").getValue());
+                    // oTempItems.ERDAT = new Date(sap.ui.getCore().byId("creazione").getValue());
+                    oTempItems.ERDAT = sap.ui.getCore().byId("creazione").getDateValue();
 
                     requestBody.navettatowip.push(oTempItems);
                 }
