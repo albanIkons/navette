@@ -27,6 +27,8 @@
                 <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit"/>
         </form:SimpleForm>
 
+        <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" />
+
         <Table id="wipOutTableId" items="{wipOutList>/}">
             <!-- <headerToolbar>
                 <OverflowToolbar>

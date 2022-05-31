@@ -1,4 +1,5 @@
 sap.ui.define([
+    "../util/ms_BarcodeScanner",
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageBox",
     'sap/ui/model/json/JSONModel',
@@ -10,7 +11,7 @@ sap.ui.define([
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, MessageBox, JSONModel, Fragment, Filter, FilterOperator, formatter) {
+    function (BarcodeScanner, Controller, MessageBox, JSONModel, Fragment, Filter, FilterOperator, formatter) {
         "use strict";
 
         var oMagazzinoArrivo;
@@ -46,6 +47,7 @@ sap.ui.define([
                     'NAVNUM': "",
                     'STATO_COLLAUDO': "",
                     'STATO_COLORE': "",
+                    'STATO_NAVETTA': "",
                     'WIP_OUT': ""
                 }];
                 this.Index = 1;
@@ -247,12 +249,15 @@ sap.ui.define([
                 const that = this;
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
+                const oNavnum = this.getView().byId("recNavetteId").getValue();
+                const oFilter = new Filter("NAVNUM", FilterOperator.EQ, oNavnum);
 
                 if (this._viewKey === 'create') {
                     this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
                 }
 
                 this.getView().getModel().read("/get_wipSet", {
+                    filters: [oFilter],
                     success: function (oData) {
                         that.getView().setModel(new JSONModel(oData.results), "wipoutHelp");
 
@@ -310,8 +315,24 @@ sap.ui.define([
                 const that = this;
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
+                const oFilter = [];
+
+                // if (this.byId("NC").getSelected()) {
+                //     oFilter.push(new Filter("STATUS_NC", 'EQ', "X"));
+                // }
+                // if (this.byId("NT").getSelected()) {
+                //     oFilter.push(new Filter("STATUS_NT", 'EQ', "X"));
+                // }
+                // if (this.byId("WR").getSelected()) {
+                //     oFilter.push(new Filter("STATUS_WR", 'EQ', "X"));
+                // }
+                // if (this.byId("NG").getSelected()) {
+                //     oFilter.push(new Filter("STATUS_NG", 'EQ', "X"));
+                // }
+
 
                 this.getView().getModel().read("/get_navnumSet", {
+                    filters: oFilter,
                     success: function (oData) {
                         that.getView().setModel(new JSONModel(oData.results), "navetteHelp");
 
@@ -404,7 +425,8 @@ sap.ui.define([
                                             break;
                                         }
                                     } else {
-                                        MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("wipoutUsed"));//Wip out already used
+                                        // MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("wipoutUsed"));//Wip out already used
+                                        MessageBox.error(oData.results[0].MESSAGE);
                                     }
                                 }
                             } else {
@@ -443,6 +465,7 @@ sap.ui.define([
                         'NAVNUM': "",
                         'STATO_COLLAUDO': "",
                         'STATO_COLORE': "",
+                        'STATO_NAVETTA': "",
                         'WIP_OUT': ""
                     }];
                     this.Index = 1;
@@ -463,6 +486,7 @@ sap.ui.define([
                         'NAVNUM': "",
                         'STATO_COLLAUDO': "",
                         'STATO_COLORE': "",
+                        'STATO_NAVETTA': "",
                         'WIP_OUT': ""
                     });
                     this._setModel(oItems, "items");//Function to update the model
@@ -535,12 +559,26 @@ sap.ui.define([
                     'NAVNUM': "",
                     'STATO_COLLAUDO': "",
                     'STATO_COLORE': "",
+                    'STATO_NAVETTA': "",
                     'WIP_OUT': ""
                 }];
                 this.Index = 1;
                 this._setModel(oItemData, "items");//Function to update the model
                 this.getView().byId("navetteIdCreate").setValue("");
 
+            },
+
+            //Call the barcode for the wip out
+            onBtnScanPress: function (oEvent) {
+                let oIndex = oEvent.getSource().getBindingContext("items").getObject().index;
+                BarcodeScanner.scan(
+                    function (oResult) { /* process scan result */
+                        this.onInsertWip(oResult.text, oIndex);
+                    }.bind(this),
+                    function (oError) {
+                        console.log(oError);
+                    }
+                );
             },
             //********************************************TRANSFER NAVETTA*************************************************************************//            
             // Event handler for Transfer Navetta press 

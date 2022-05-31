@@ -24,4 +24,6 @@
         <Input id="transferNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
     </form:SimpleForm>
 
+    <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" />
+
 </core:FragmentDefinition>

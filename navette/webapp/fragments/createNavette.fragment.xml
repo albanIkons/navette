@@ -9,6 +9,8 @@
         <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaList" />
     </form:SimpleForm>
 
+    <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" />
+
     <Table id="table" items="{items>/}" visible="true">
         <headerToolbar>
             <OverflowToolbar>
@@ -19,16 +21,17 @@
             </OverflowToolbar>
         </headerToolbar>
         <columns>
-            <Column minScreenWidth="Tablet" demandPopin="true">
+            <Column minScreenWidth="Tablet" demandPopin="true" width="12%">
                 <Text text="{i18n>wipout}" wrapping="" />
             </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true" width="4%"></Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="{i18n>ordine}" wrapping="false" />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
+            <Column minScreenWidth="Tablet" demandPopin="true" width="12%">
                 <Text text="{i18n>materiale}" wrapping="false" />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
+            <Column minScreenWidth="Tablet" demandPopin="true" width="8%">
                 <Text text="{i18n>descrMateriale}" wrapping="false" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
@@ -38,10 +41,13 @@
                 <Text text="{i18n>colore}" wrapping="false" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="Icona Collaudo" wrapping="false" />
+                <Text text="Collaudo" wrapping="false" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="Collaudo" wrapping="false" />
+            </Column>
+            <Column minScreenWidth="Tablet" demandPopin="true">
+                <Text text="Stato Nav" wrapping="false" />
             </Column>
             <Column minScreenWidth="Tablet" demandPopin="true">
                 <Text text="{i18n>centroLavoro}" wrapping="false" />
@@ -59,7 +65,10 @@
         <items>
             <ColumnListItem>
                 <cells>
+
                     <Input key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit" />
+                    <Button width="15%" icon="sap-icon://bar-code" type="Emphasized" id="b_field1" press="onBtnScanPress" />
+
                     <ObjectIdentifier text="{items>AUFNR}" />
                     <ObjectIdentifier text="{items>MATNR}" />
                     <ObjectIdentifier text="{items>MAKTX}" />
@@ -67,6 +76,7 @@
                     <ObjectIdentifier text="{items>STATO_COLORE}" />
                     <core:Icon src="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColl'}" color="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColor'}" />
                     <ObjectIdentifier text="{items>STATO_COLLAUDO}" />
+                    <ObjectIdentifier text="{items>STATO_NAVETTA}" />
                     <ObjectIdentifier text="{items>ARBPL}" />
                     <ObjectIdentifier text="{items>MENGE}" />
                     <ObjectIdentifier text="{items>MEINS}" />
