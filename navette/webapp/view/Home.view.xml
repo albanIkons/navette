@@ -13,7 +13,7 @@
             <content>
                 <IconTabBar id="iconTabBar" expanded="true" class="sapUiResponsiveContentPadding" select="onIconTabBarSelect">
                     <items>
-                        <IconTabFilter icon="sap-icon://create" key="create" iconColor="Negative" text="{i18n>creazioneNavette}">
+                        <IconTabFilter icon="sap-icon://create" key="create" iconColor="Negative" text="{i18n>creazioneNavette}" width="100%">
                             <!--Create navette content goes here-->
                             <core:Fragment fragmentName="npmnavette.navette.fragments.createNavette" type="XML" />
                         </IconTabFilter>

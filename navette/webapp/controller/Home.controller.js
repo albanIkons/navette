@@ -22,11 +22,14 @@ sap.ui.define([
             formatter: formatter,
             onInit: function () {
 
+                const oDevice = sap.ui.Device.system;
+
                 this._viewKey = 'create';
                 // Main Model to controll view (bussy status etc)
                 const oMainModel = {
                     trasferBusy: false,
-                    receiveBusy: false
+                    receiveBusy: false,
+                    mobile:  ( oDevice.phone === true || oDevice.tablet === true ? true : false )
                 };
                 this._setModel(oMainModel, "mainModel");
 
@@ -371,7 +374,8 @@ sap.ui.define([
             onHelpCloseNavette: function (oEvent) {
                 const oSelectedItem = oEvent.getParameter("selectedItem");
                 oEvent.getSource().getBinding("items").filter([]);
-                const oNaveteNumber = oSelectedItem.getTitle();
+                
+                const oNaveteNumber = ( typeof oSelectedItem === 'undefined' ? '' : oSelectedItem.getTitle());
 
                 if (this._viewKey === 'create') {
                     const oNavetteInput = this.byId("navetteIdCreate");

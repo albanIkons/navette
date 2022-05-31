@@ -27,7 +27,26 @@
                 <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit"/>
         </form:SimpleForm>
 
-        <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" />
+        <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->
+
+        <VBox class="sapUiSmallMargin">
+            <Label text="{i18n>selNavetta}" />
+            <HBox class="sapUiTinyMarginTopBottom">
+                <VBox class="sapUiMediumMarginEnd">
+                    <CheckBox id="receiveCheckBoxNc" text="NC" selected="false"/>
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd">
+                    <CheckBox id="receiveCheckBoxNt" text="NT" selected="false"  />
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd">
+                    <CheckBox id="receiveCheckBoxWr" text="WR" selected="false" />
+                </VBox>
+                <VBox class="sapUiMediumMarginEnd">
+                    <CheckBox id="receiveCheckBoxNg" text="NG" selected="false" />
+                </VBox>
+            </HBox>
+        </VBox>
+
 
         <Table id="wipOutTableId" items="{wipOutList>/}">
             <!-- <headerToolbar>
@@ -36,13 +55,13 @@
                 </OverflowToolbar>
             </headerToolbar> -->
             <columns>
-                <Column minScreenWidth="Tablet" demandPopin="true">
+                <Column demandPopin="true">
                     <Text text="Navette" wrapping="" />
                 </Column>
-                <Column minScreenWidth="Tablet" demandPopin="true">
+                <Column  demandPopin="true">
                     <Text text="Wip Out" wrapping="false" />
                 </Column>
-                <Column minScreenWidth="Tablet" demandPopin="true">
+                <Column  demandPopin="true">
                     <Text text="Message" wrapping="false" />
                 </Column>
             </columns>

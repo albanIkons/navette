@@ -9,9 +9,33 @@
         <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaList" />
     </form:SimpleForm>
 
-    <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" />
+    <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->
 
-    <Table id="table" items="{items>/}" visible="true">
+    <VBox class="sapUiSmallMargin">
+        <Label text="{i18n>selNavetta}" />
+        <HBox class="sapUiTinyMarginTopBottom">
+            <VBox class="sapUiMediumMarginEnd">
+                <CheckBox id="createCheckBoxNc" text="NC" selected="false"/>
+            </VBox>
+            <VBox class="sapUiMediumMarginEnd">
+                <CheckBox id="createCheckBoxNt" text="NT" selected="false"  />
+            </VBox>
+            <VBox class="sapUiMediumMarginEnd">
+                <CheckBox id="createCheckBoxWr" text="WR" selected="false" />
+            </VBox>
+            <VBox class="sapUiMediumMarginEnd">
+                <CheckBox id="createCheckBoxNg" text="NG" selected="false" />
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <ScrollContainer
+    height="100%"
+    width="100%"
+    vertical="true"
+    focusable="true"> 
+
+    <Table id="table" items="{items>/}">
         <headerToolbar>
             <OverflowToolbar>
                 <Title text="{i18n>itemText}" />
@@ -21,53 +45,54 @@
             </OverflowToolbar>
         </headerToolbar>
         <columns>
-            <Column minScreenWidth="Tablet" demandPopin="true" width="12%">
-                <Text text="{i18n>wipout}" wrapping="" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : '16%'}">
+                <Text text="{i18n>wipout}"/>
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true" width="4%"></Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="{i18n>ordine}" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="{i18n>ordine}"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true" width="12%">
-                <Text text="{i18n>materiale}" wrapping="false" />
+            <Column  width="{= ${mainModel>/mobile} === true ? '150px' : '14%'}">
+                <Text text="{i18n>materiale}"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true" width="8%">
-                <Text text="{i18n>descrMateriale}" wrapping="false" />
+            <Column  width="{= ${mainModel>/mobile} === true ? '150px' : '10%'}">
+                <Text text="{i18n>descrMateriale}"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="{i18n>Icona}" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="{i18n>Icona}"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="{i18n>colore}" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="{i18n>colore}"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="Collaudo" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="Collaudo"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="Collaudo" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="Collaudo"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="Stato Nav" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="Stato Nav"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="{i18n>centroLavoro}" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="{i18n>centroLavoro}"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="{i18n>quantita}" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="{i18n>quantita}"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="{i18n>um}" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="{i18n>um}"  />
             </Column>
-            <Column minScreenWidth="Tablet" demandPopin="true">
-                <Text text="{i18n>rimuovi}" wrapping="false" />
+            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <Text text="{i18n>rimuovi}"  />
             </Column>
         </columns>
         <items>
             <ColumnListItem>
                 <cells>
 
-                    <Input key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit" />
-                    <Button width="15%" icon="sap-icon://bar-code" type="Emphasized" id="b_field1" press="onBtnScanPress" />
+                    <HBox>
+                        <Input key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit" />
+                        <Button width="40px" class="sapUiTinyMarginBegin" icon="sap-icon://bar-code" type="Emphasized" id="b_field1" press="onBtnScanPress" />
+                    </HBox>
 
                     <ObjectIdentifier text="{items>AUFNR}" />
                     <ObjectIdentifier text="{items>MATNR}" />
@@ -85,5 +110,6 @@
             </ColumnListItem>
         </items>
     </Table>
+    </ScrollContainer>
 
 </core:FragmentDefinition>

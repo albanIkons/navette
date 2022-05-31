@@ -24,6 +24,23 @@
         <Input id="transferNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
     </form:SimpleForm>
 
-    <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" />
+    <VBox class="sapUiSmallMargin">
+        <Label text="{i18n>selNavetta}" />
+        <HBox class="sapUiTinyMarginTopBottom">
+            <VBox class="sapUiMediumMarginEnd">
+                <CheckBox id="transferCheckBoxNc" text="NC" selected="false"/>
+            </VBox>
+            <VBox class="sapUiMediumMarginEnd">
+                <CheckBox id="transferCheckBoxNt" text="NT" selected="false"  />
+            </VBox>
+            <VBox class="sapUiMediumMarginEnd">
+                <CheckBox id="transferCheckBoxWr" text="WR" selected="false" />
+            </VBox>
+            <VBox class="sapUiMediumMarginEnd">
+                <CheckBox id="transferCheckBoxNg" text="NG" selected="false" />
+            </VBox>
+        </HBox>
+    </VBox>
+    <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->
 
 </core:FragmentDefinition>
