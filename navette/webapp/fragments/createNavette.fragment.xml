@@ -97,7 +97,7 @@
                         <ObjectIdentifier text="{items>STATO_COLORE}" />
                         <core:Icon src="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColl'}" color="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColor'}" />
                         <ObjectIdentifier text="{items>STATO_COLLAUDO}" />
-                        <ObjectIdentifier text="{items>STATO}" />
+                        <ObjectIdentifier text="{items>STATUS}" />
                         <ObjectIdentifier text="{items>ARBPL}" />
                         <ObjectIdentifier text="{items>MENGE}" />
                         <ObjectIdentifier text="{items>MEINS}" />
