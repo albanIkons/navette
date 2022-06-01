@@ -28,19 +28,18 @@
         <Label text="{i18n>selNavetta}" />
         <HBox class="sapUiTinyMarginTopBottom">
             <VBox class="sapUiMediumMarginEnd">
-                <CheckBox id="transferCheckBoxNc" text="NC" selected="false"/>
+                <CheckBox id="NC_T" text="NC" selected="false"/>
             </VBox>
             <VBox class="sapUiMediumMarginEnd">
-                <CheckBox id="transferCheckBoxNt" text="NT" selected="false"  />
+                <CheckBox id="NT_T" text="NT" selected="false"  />
             </VBox>
             <VBox class="sapUiMediumMarginEnd">
-                <CheckBox id="transferCheckBoxWr" text="WR" selected="false" />
+                <CheckBox id="WR_T" text="WR" selected="false" />
             </VBox>
             <VBox class="sapUiMediumMarginEnd">
-                <CheckBox id="transferCheckBoxNg" text="NG" selected="false" />
+                <CheckBox id="NG_T" text="NG" selected="false" />
             </VBox>
         </HBox>
     </VBox>
-    <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->
 
 </core:FragmentDefinition>

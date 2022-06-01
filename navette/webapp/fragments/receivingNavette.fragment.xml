@@ -33,16 +33,16 @@
             <Label text="{i18n>selNavetta}" />
             <HBox class="sapUiTinyMarginTopBottom">
                 <VBox class="sapUiMediumMarginEnd">
-                    <CheckBox id="receiveCheckBoxNc" text="NC" selected="false"/>
+                    <CheckBox id="NC_R" text="NC" selected="false"/>
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd">
-                    <CheckBox id="receiveCheckBoxNt" text="NT" selected="false"  />
+                    <CheckBox id="NT_R" text="NT" selected="false"  />
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd">
-                    <CheckBox id="receiveCheckBoxWr" text="WR" selected="false" />
+                    <CheckBox id="WR_R" text="WR" selected="false" />
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd">
-                    <CheckBox id="receiveCheckBoxNg" text="NG" selected="false" />
+                    <CheckBox id="NG_R" text="NG" selected="false" />
                 </VBox>
             </HBox>
         </VBox>

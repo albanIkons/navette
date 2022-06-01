@@ -29,7 +29,7 @@ sap.ui.define([
                 const oMainModel = {
                     trasferBusy: false,
                     receiveBusy: false,
-                    mobile:  ( oDevice.phone === true || oDevice.tablet === true ? true : false )
+                    mobile: (oDevice.phone === true || oDevice.tablet === true ? true : false)
                 };
                 this._setModel(oMainModel, "mainModel");
 
@@ -50,7 +50,7 @@ sap.ui.define([
                     'NAVNUM': "",
                     'STATO_COLLAUDO': "",
                     'STATO_COLORE': "",
-                    'STATO_NAVETTA': "",
+                    'STATO': "",
                     'WIP_OUT': ""
                 }];
                 this.Index = 1;
@@ -253,10 +253,13 @@ sap.ui.define([
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
                 const oNavnum = this.getView().byId("recNavetteId").getValue();
-                const oFilter = new Filter("NAVNUM", FilterOperator.EQ, oNavnum);
+                var oFilter = [];//new Filter("NAVNUM", FilterOperator.EQ, oNavnum);
 
                 if (this._viewKey === 'create') {
                     this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
+                }
+                if (oNavnum) {
+                    oFilter = new Filter("NAVNUM", FilterOperator.EQ, oNavnum);
                 }
 
                 this.getView().getModel().read("/get_wipSet", {
@@ -319,20 +322,20 @@ sap.ui.define([
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
                 const oFilter = [];
+                const oFilterArray = this.checkboxFilter();
 
-                // if (this.byId("NC").getSelected()) {
-                //     oFilter.push(new Filter("STATUS_NC", 'EQ', "X"));
-                // }
-                // if (this.byId("NT").getSelected()) {
-                //     oFilter.push(new Filter("STATUS_NT", 'EQ', "X"));
-                // }
-                // if (this.byId("WR").getSelected()) {
-                //     oFilter.push(new Filter("STATUS_WR", 'EQ', "X"));
-                // }
-                // if (this.byId("NG").getSelected()) {
-                //     oFilter.push(new Filter("STATUS_NG", 'EQ', "X"));
-                // }
-
+                if (oFilterArray.NC) {
+                    oFilter.push(new Filter("STATUS_NC", 'EQ', "X"));
+                }
+                if (oFilterArray.NT) {
+                    oFilter.push(new Filter("STATUS_NT", 'EQ', "X"));
+                }
+                if (oFilterArray.WR) {
+                    oFilter.push(new Filter("STATUS_WR", 'EQ', "X"));
+                }
+                if (oFilterArray.NG) {
+                    oFilter.push(new Filter("STATUS_NG", 'EQ', "X"));
+                }
 
                 this.getView().getModel().read("/get_navnumSet", {
                     filters: oFilter,
@@ -374,8 +377,8 @@ sap.ui.define([
             onHelpCloseNavette: function (oEvent) {
                 const oSelectedItem = oEvent.getParameter("selectedItem");
                 oEvent.getSource().getBinding("items").filter([]);
-                
-                const oNaveteNumber = ( typeof oSelectedItem === 'undefined' ? '' : oSelectedItem.getTitle());
+
+                const oNaveteNumber = (typeof oSelectedItem === 'undefined' ? '' : oSelectedItem.getTitle());
 
                 if (this._viewKey === 'create') {
                     const oNavetteInput = this.byId("navetteIdCreate");
@@ -469,7 +472,7 @@ sap.ui.define([
                         'NAVNUM': "",
                         'STATO_COLLAUDO': "",
                         'STATO_COLORE': "",
-                        'STATO_NAVETTA': "",
+                        'STATO': "",
                         'WIP_OUT': ""
                     }];
                     this.Index = 1;
@@ -490,7 +493,7 @@ sap.ui.define([
                         'NAVNUM': "",
                         'STATO_COLLAUDO': "",
                         'STATO_COLORE': "",
-                        'STATO_NAVETTA': "",
+                        'STATO': "",
                         'WIP_OUT': ""
                     });
                     this._setModel(oItems, "items");//Function to update the model
@@ -542,6 +545,7 @@ sap.ui.define([
                 this._viewKey = oKey;
                 if (oKey == "create") {
                     this._showFooter(true);
+                    this.getView().byId("recNavetteId").setValue("");
                 } else {
                     this._showFooter(false);
                 }
@@ -563,7 +567,7 @@ sap.ui.define([
                     'NAVNUM': "",
                     'STATO_COLLAUDO': "",
                     'STATO_COLORE': "",
-                    'STATO_NAVETTA': "",
+                    'STATO': "",
                     'WIP_OUT': ""
                 }];
                 this.Index = 1;
@@ -583,6 +587,61 @@ sap.ui.define([
                         console.log(oError);
                     }
                 );
+            },
+
+            checkboxFilter: function () {
+                const aFilter = {
+                    "NC": false,
+                    "NT": false,
+                    "WR": false,
+                    "NG": false
+                };
+
+                switch (this._viewKey) {
+                    case "create":
+                        if (this.byId("NC_C").getSelected()) {
+                            aFilter.NC = true;
+                        }
+                        if (this.byId("NT_C").getSelected()) {
+                            aFilter.NT = true;
+                        }
+                        if (this.byId("WR_C").getSelected()) {
+                            aFilter.WR = true;
+                        }
+                        if (this.byId("NG_C").getSelected()) {
+                            aFilter.NG = true;
+                        }
+                        break;
+                    case "transfer":
+                        if (this.byId("NC_T").getSelected()) {
+                            aFilter.NC = true;
+                        }
+                        if (this.byId("NT_T").getSelected()) {
+                            aFilter.NT = true;
+                        }
+                        if (this.byId("WR_T").getSelected()) {
+                            aFilter.WR = true;
+                        }
+                        if (this.byId("NG_T").getSelected()) {
+                            aFilter.NG = true;
+                        }
+                        break;
+                    case "receive":
+                        if (this.byId("NC_R").getSelected()) {
+                            aFilter.NC = true;
+                        }
+                        if (this.byId("NT_R").getSelected()) {
+                            aFilter.NT = true;
+                        }
+                        if (this.byId("WR_R").getSelected()) {
+                            aFilter.WR = true;
+                        }
+                        if (this.byId("NG_R").getSelected()) {
+                            aFilter.NG = true;
+                        }
+                        break;
+                }
+                return aFilter;
             },
             //********************************************TRANSFER NAVETTA*************************************************************************//            
             // Event handler for Transfer Navetta press 

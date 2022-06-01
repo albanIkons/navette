@@ -15,101 +15,97 @@
         <Label text="{i18n>selNavetta}" />
         <HBox class="sapUiTinyMarginTopBottom">
             <VBox class="sapUiMediumMarginEnd">
-                <CheckBox id="createCheckBoxNc" text="NC" selected="false"/>
+                <CheckBox id="NC_C" text="NC" selected="false" />
             </VBox>
             <VBox class="sapUiMediumMarginEnd">
-                <CheckBox id="createCheckBoxNt" text="NT" selected="false"  />
+                <CheckBox id="NT_C" text="NT" selected="false" />
             </VBox>
             <VBox class="sapUiMediumMarginEnd">
-                <CheckBox id="createCheckBoxWr" text="WR" selected="false" />
+                <CheckBox id="WR_C" text="WR" selected="false" />
             </VBox>
             <VBox class="sapUiMediumMarginEnd">
-                <CheckBox id="createCheckBoxNg" text="NG" selected="false" />
+                <CheckBox id="NG_C" text="NG" selected="false" />
             </VBox>
         </HBox>
     </VBox>
 
-    <ScrollContainer
-    height="100%"
-    width="100%"
-    vertical="true"
-    focusable="true"> 
+    <ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
 
-    <Table id="table" items="{items>/}">
-        <headerToolbar>
-            <OverflowToolbar>
-                <Title text="{i18n>itemText}" />
-                <ToolbarSpacer />
-                <Button text="{i18n>addWipOut}" icon="sap-icon://sys-add" press="onAddItem" />
-                <Button type="Reject" text="{i18n>pulisci}" icon="sap-icon://less" press="onClearItemModel" />
-            </OverflowToolbar>
-        </headerToolbar>
-        <columns>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : '16%'}">
-                <Text text="{i18n>wipout}"/>
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="{i18n>ordine}"  />
-            </Column>
-            <Column  width="{= ${mainModel>/mobile} === true ? '150px' : '14%'}">
-                <Text text="{i18n>materiale}"  />
-            </Column>
-            <Column  width="{= ${mainModel>/mobile} === true ? '150px' : '10%'}">
-                <Text text="{i18n>descrMateriale}"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="{i18n>Icona}"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="{i18n>colore}"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="Collaudo"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="Collaudo"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="Stato Nav"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="{i18n>centroLavoro}"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="{i18n>quantita}"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="{i18n>um}"  />
-            </Column>
-            <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
-                <Text text="{i18n>rimuovi}"  />
-            </Column>
-        </columns>
-        <items>
-            <ColumnListItem>
-                <cells>
+        <Table id="table" items="{items>/}">
+            <headerToolbar>
+                <OverflowToolbar>
+                    <Title text="{i18n>itemText}" />
+                    <ToolbarSpacer />
+                    <Button text="{i18n>addWipOut}" icon="sap-icon://sys-add" press="onAddItem" />
+                    <Button type="Reject" text="{i18n>pulisci}" icon="sap-icon://less" press="onClearItemModel" />
+                </OverflowToolbar>
+            </headerToolbar>
+            <columns>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : '14%'}">
+                    <Text text="{i18n>wipout}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>ordine}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : '14%'}">
+                    <Text text="{i18n>materiale}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : '8%'}">
+                    <Text text="{i18n>descrMateriale}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>Icona}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>colore}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="Collaudo" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="Collaudo" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="Stato Nav" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>centroLavoro}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>quantita}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>um}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>rimuovi}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
 
-                    <HBox>
-                        <Input key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit" />
-                        <Button width="40px" class="sapUiTinyMarginBegin" icon="sap-icon://bar-code" type="Emphasized" id="b_field1" press="onBtnScanPress" />
-                    </HBox>
+                        <HBox>
+                            <Input key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit" />
+                            <Button width="40px" class="sapUiTinyMarginBegin" icon="sap-icon://bar-code" type="Emphasized" id="b_field1" press="onBtnScanPress" />
+                        </HBox>
 
-                    <ObjectIdentifier text="{items>AUFNR}" />
-                    <ObjectIdentifier text="{items>MATNR}" />
-                    <ObjectIdentifier text="{items>MAKTX}" />
-                    <core:Icon src="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.icona'}" color="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.iconaColor'}" />
-                    <ObjectIdentifier text="{items>STATO_COLORE}" />
-                    <core:Icon src="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColl'}" color="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColor'}" />
-                    <ObjectIdentifier text="{items>STATO_COLLAUDO}" />
-                    <ObjectIdentifier text="{items>STATO_NAVETTA}" />
-                    <ObjectIdentifier text="{items>ARBPL}" />
-                    <ObjectIdentifier text="{items>MENGE}" />
-                    <ObjectIdentifier text="{items>MEINS}" />
-                    <Button icon="sap-icon://delete" press="onDeleteItem" type="Reject" />
-                </cells>
-            </ColumnListItem>
-        </items>
-    </Table>
+                        <ObjectIdentifier text="{items>AUFNR}" />
+                        <ObjectIdentifier text="{items>MATNR}" />
+                        <ObjectIdentifier text="{items>MAKTX}" />
+                        <core:Icon src="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.icona'}" color="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.iconaColor'}" />
+                        <ObjectIdentifier text="{items>STATO_COLORE}" />
+                        <core:Icon src="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColl'}" color="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColor'}" />
+                        <ObjectIdentifier text="{items>STATO_COLLAUDO}" />
+                        <ObjectIdentifier text="{items>STATO}" />
+                        <ObjectIdentifier text="{items>ARBPL}" />
+                        <ObjectIdentifier text="{items>MENGE}" />
+                        <ObjectIdentifier text="{items>MEINS}" />
+                        <Button icon="sap-icon://delete" press="onDeleteItem" type="Reject" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
     </ScrollContainer>
 
 </core:FragmentDefinition>
