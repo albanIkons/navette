@@ -56,6 +56,12 @@ sap.ui.define([
                 this.Index = 1;
                 this._setModel(oItemData, "items");//Function to update the model
 
+                //Initialize Loader Model
+                const oModel = new JSONModel({
+					busy: false
+				});
+				this.getView().setModel(oModel, "viewModel");
+
             },
 
             //******************************************CREAZIONE NAVETTA**************************************************************************//
@@ -89,6 +95,7 @@ sap.ui.define([
                 const oNavnum = this.getView().byId("navetteIdCreate").getValue();
                 const that = this;
                 const oModel = that.getView().getModel("items");
+                const oViewModel = this.getView().getModel("viewModel");
 
                 const requestBody = {//Create the structure fo deep entity
                     NAVNUM: (oNavnum == "") ? '&&' : oNavnum, //Header
@@ -115,8 +122,10 @@ sap.ui.define([
                 }
 
                 //Call the deep entity
+                oViewModel.setProperty('/busy', true);
                 this.getView().getModel().create("/update_navettaSet", requestBody, {
                     success: function (oData) {
+                        oViewModel.setProperty('/busy', false);
                         that.onCloseDialog();
                         oModel.setData(null);
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
@@ -126,6 +135,7 @@ sap.ui.define([
                         }
                     },
                     error: function (err) {
+                        oViewModel.setProperty('/busy', false);
                         that.onCloseDialog();
                         oModel.setData(null);
                         if (oNavnum) {
@@ -174,11 +184,14 @@ sap.ui.define([
                 const oNavetta = this.getView().byId("navetteIdCreate").getValue();
                 const aFilter = new Filter('NAVNUM', FilterOperator.EQ, oNavetta);
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
+                const oViewModel = this.getView().getModel("viewModel");
 
+                oViewModel.setProperty('/busy', true);
                 this.getView().getModel().read("/dati_navettaSet", {
                     filters: [aFilter],
                     success: function (oData) {
                         //Clear the model and insert new wip-out
+                        oViewModel.setProperty('/busy', false);
                         const oModel = that.getView().getModel("items");
                         oModel.setData(null);
                         that._setModel(oData.results, "items");//Function to update the model	
@@ -189,6 +202,7 @@ sap.ui.define([
                         oMagazzinoData = oData.results[0].ERDAT;
                     },
                     error: function (err) {
+                        oViewModel.setProperty('/busy', false);
                         MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noNavetta"));
                     }
                 });
@@ -200,8 +214,12 @@ sap.ui.define([
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
                 this.MagazzinoId = oEvent.mParameters.id.substring(oEvent.getSource().getId().length - 8);
+                const oViewModel = this.getView().getModel("viewModel");
+
+                oViewModel.setProperty('/busy', true);
                 that.getView().getModel().read("/get_lgortSet", {
                     success: function (oData) {
+                        oViewModel.setProperty('/busy', false);
                         that.getView().setModel(new JSONModel(oData.results), "magazzinoHelp");
 
                         if (!that._pValueHelpMagazzinoDialog) {
@@ -226,6 +244,7 @@ sap.ui.define([
                     },
                     error: function (err) {
                         console.log(err);
+                        oViewModel.setProperty('/busy', false);
                     }
                 });
             },
@@ -253,7 +272,8 @@ sap.ui.define([
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
                 const oNavnum = this.getView().byId("recNavetteId").getValue();
-                var oFilter = [];//new Filter("NAVNUM", FilterOperator.EQ, oNavnum);
+                var oFilter = []; 
+                const oViewModel = this.getView().getModel("viewModel");
 
                 if (this._viewKey === 'create') {
                     this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
@@ -262,9 +282,11 @@ sap.ui.define([
                     oFilter = new Filter("NAVNUM", FilterOperator.EQ, oNavnum);
                 }
 
+                oViewModel.setProperty('/busy', true);
                 this.getView().getModel().read("/get_wipSet", {
                     filters: [oFilter],
                     success: function (oData) {
+                        oViewModel.setProperty('/busy', false);
                         that.getView().setModel(new JSONModel(oData.results), "wipoutHelp");
 
                         if (!that._pValueHelpWipOutDialog) {
@@ -288,6 +310,7 @@ sap.ui.define([
 
                     },
                     error: function (err) {
+                        oViewModel.setProperty('/busy', false);
                         console.log(err);
                     }
                 });
@@ -323,6 +346,7 @@ sap.ui.define([
                 const sInputValue = oEvent.getSource().getValue();
                 const oFilter = [];
                 const oFilterArray = this.checkboxFilter();
+                const oViewModel = this.getView().getModel("viewModel");
 
                 if (oFilterArray.NC) {
                     oFilter.push(new Filter("STATUS_NC", 'EQ', "X"));
@@ -337,9 +361,11 @@ sap.ui.define([
                     oFilter.push(new Filter("STATUS_NG", 'EQ', "X"));
                 }
 
+                oViewModel.setProperty('/busy', true);
                 this.getView().getModel().read("/get_navnumSet", {
                     filters: oFilter,
                     success: function (oData) {
+                        oViewModel.setProperty('/busy', false);
                         that.getView().setModel(new JSONModel(oData.results), "navetteHelp");
 
                         if (!that._pValueHelpNavetteDialog) {
@@ -363,6 +389,7 @@ sap.ui.define([
 
                     },
                     error: function (err) {
+                        oViewModel.setProperty('/busy', false);
                         console.log(err);
                     }
                 });
@@ -411,6 +438,7 @@ sap.ui.define([
                 const that = this;
                 // const oLgort = this.checkFieldSplit(this.byId("arrivo__").getValue());
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
+                const oViewModel = this.getView().getModel("viewModel");
                 // const aFilter = new Filter({
                 //     filters: [new Filter('WIP_OUT', FilterOperator.EQ, iWipOut),
                 //               new Filter('LGORT', FilterOperator.EQ, oLgort)]
@@ -419,9 +447,11 @@ sap.ui.define([
                 var oCheckWip = this.checkExistingWip(iWipOut, iIndex);
 
                 if (!oCheckWip) {//Add wip only in case is not already used
+                    oViewModel.setProperty('/busy', true);
                     this.getView().getModel().read("/get_wipdataSet", {
                         filters: [aFilter],
                         success: function (oData) {
+                            oViewModel.setProperty('/busy', false);
                             if (oData.results.length === 1) {
                                 for (var i = 0; i < oItems.length; i++) {//Change the selected index
                                     if (oData.results[0].MESSAGE === "") {
@@ -441,6 +471,7 @@ sap.ui.define([
                             }
                         },
                         error: function (err) {
+                            oViewModel.setProperty('/busy', false);
                             console.log(err);
                         }
                     });

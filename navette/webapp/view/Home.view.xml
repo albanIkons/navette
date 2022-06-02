@@ -9,7 +9,7 @@
 </html:style>
 
     <Shell id="shell">
-        <Page id="page" title="{i18n>title}">
+        <Page id="page" title="{i18n>title}" busy="{viewModel>/busy}">
             <content>
                 <IconTabBar id="iconTabBar" expanded="true" class="sapUiResponsiveContentPadding" select="onIconTabBarSelect">
                     <items>
