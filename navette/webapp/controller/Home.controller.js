@@ -51,16 +51,18 @@ sap.ui.define([
                     'STATO_COLLAUDO': "",
                     'STATO_COLORE': "",
                     'STATO': "",
-                    'WIP_OUT': ""
+                    'WIP_OUT': "",
+                    'RUECK': "",
+                    'RMZHL': ""
                 }];
                 this.Index = 1;
                 this._setModel(oItemData, "items");//Function to update the model
 
                 //Initialize Loader Model
                 const oModel = new JSONModel({
-					busy: false
-				});
-				this.getView().setModel(oModel, "viewModel");
+                    busy: false
+                });
+                this.getView().setModel(oModel, "viewModel");
 
             },
 
@@ -115,6 +117,8 @@ sap.ui.define([
                     oTempItems.ARBPL = oItems[i].ARBPL;
                     oTempItems.MENGE = oItems[i].MENGE;
                     oTempItems.MEINS = oItems[i].MEINS;
+                    oTempItems.RUECK = oItems[i].RUECK;
+                    oTempItems.RMZHL = oItems[i].RMZHL;
                     // oTempItems.ERDAT = new Date(sap.ui.getCore().byId("creazione").getValue());
                     oTempItems.ERDAT = sap.ui.getCore().byId("creazione").getDateValue();
 
@@ -129,9 +133,9 @@ sap.ui.define([
                         that.onCloseDialog();
                         oModel.setData(null);
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
-                            MessageBox.success("La navetta " + oNavnum + " e stata creata");//Sucessful update
-                        } else {
                             MessageBox.success("La navetta " + oData.navettatowip.results[0].NAVNUM + " e stata aggiornata");//Sucessful update
+                        } else {
+                            MessageBox.success("La navetta " + oNavnum + " e stata creata");//Sucessful update
                         }
                     },
                     error: function (err) {
@@ -272,7 +276,7 @@ sap.ui.define([
                 const oView = this.getView();
                 const sInputValue = oEvent.getSource().getValue();
                 const oNavnum = this.getView().byId("recNavetteId").getValue();
-                var oFilter = []; 
+                var oFilter = [];
                 const oViewModel = this.getView().getModel("viewModel");
 
                 if (this._viewKey === 'create') {
@@ -504,7 +508,9 @@ sap.ui.define([
                         'STATO_COLLAUDO': "",
                         'STATO_COLORE': "",
                         'STATO': "",
-                        'WIP_OUT': ""
+                        'WIP_OUT': "",
+                        'RUECK': "",
+                        'RMZHL': ""
                     }];
                     this.Index = 1;
                     this._setModel(oItemData, "items");//Function to update the model
@@ -525,7 +531,9 @@ sap.ui.define([
                         'STATO_COLLAUDO': "",
                         'STATO_COLORE': "",
                         'STATO': "",
-                        'WIP_OUT': ""
+                        'WIP_OUT': "",
+                        'RUECK': "",
+                        'RMZHL': ""
                     });
                     this._setModel(oItems, "items");//Function to update the model
                 }
@@ -599,7 +607,9 @@ sap.ui.define([
                     'STATO_COLLAUDO': "",
                     'STATO_COLORE': "",
                     'STATO': "",
-                    'WIP_OUT': ""
+                    'WIP_OUT': "",
+                    'RUECK': "",
+                    'RMZHL': ""
                 }];
                 this.Index = 1;
                 this._setModel(oItemData, "items");//Function to update the model
