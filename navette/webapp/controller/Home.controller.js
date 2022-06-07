@@ -414,6 +414,7 @@ sap.ui.define([
                 if (this._viewKey === 'create') {
                     const oNavetteInput = this.byId("navetteIdCreate");
                     oNavetteInput.setValue(oNaveteNumber);
+                    this.getNavettaList();
                 } else if (this._viewKey === 'transfer') {
                     const oNavetteInput = this.byId("transferNavetteId");
                     oNavetteInput.setValue(oNaveteNumber);
@@ -585,8 +586,24 @@ sap.ui.define([
                 if (oKey == "create") {
                     this._showFooter(true);
                     this.getView().byId("recNavetteId").setValue("");
-                } else {
+                    this.getView().byId("recieveWipOutId").setValue("");
+                    this.getView().byId("transferNavetteId").setValue("");
+                    this.getView().byId("navetteIdCreate").setValue("");
+                    this.onClearItemModel();
+                } else if (oKey == "transfer") {
                     this._showFooter(false);
+                    this.getView().byId("recNavetteId").setValue("");
+                    this.getView().byId("recieveWipOutId").setValue("");
+                    this.getView().byId("transferNavetteId").setValue("");
+                    this.getView().byId("navetteIdCreate").setValue("");
+                    this.onClearItemModel();
+                } else if (oKey == "receive") {
+                    this._showFooter(false);
+                    this.getView().byId("recNavetteId").setValue("");
+                    this.getView().byId("recieveWipOutId").setValue("");
+                    this.getView().byId("transferNavetteId").setValue("");
+                    this.getView().byId("navetteIdCreate").setValue("");
+                    this.onClearItemModel();
                 }
             },
 

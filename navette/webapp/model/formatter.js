@@ -10,18 +10,22 @@ sap.ui.define([], function () {
         },
 
         icona: function (sIcona) {
-            if (sIcona == "NI" ) {
-                 return "";
+            if (sIcona == "NI") {
+                return "";
+            } else if (sIcona == "@08@") {
+                return "sap-icon://busy";
             } else {
-                return "sap-icon://status-negative"; 
+                return "sap-icon://color-fill";
             }
         },
 
         iconaColl: function (sIcona) {
-            if (sIcona == "NI" ) {
-                 return "";
+            if (sIcona == "NI") {
+                return "";
+            } else if (sIcona == "@08@") {
+                return "sap-icon://busy";
             } else {
-                return "sap-icon://status-negative"; 
+                return "sap-icon://color-fill";
             }
         },
 

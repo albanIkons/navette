@@ -41,7 +41,7 @@
                 </OverflowToolbar>
             </headerToolbar>
             <columns>
-                <Column width="{= ${mainModel>/mobile} === true ? '150px' : '14%'}">
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : '18%'}">
                     <Text text="{i18n>wipout}" />
                 </Column>
                 <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
@@ -56,15 +56,15 @@
                 <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                     <Text text="{i18n>Icona}" />
                 </Column>
-                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                     <Text text="{i18n>colore}" />
-                </Column>
+                </Column> -->
                 <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                     <Text text="Collaudo" />
                 </Column>
-                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                     <Text text="Collaudo" />
-                </Column>
+                </Column> -->
                 <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                     <Text text="Stato Nav" />
                 </Column>
@@ -93,10 +93,10 @@
                         <ObjectIdentifier text="{items>AUFNR}" />
                         <ObjectIdentifier text="{items>MATNR}" />
                         <ObjectIdentifier text="{items>MAKTX}" />
-                        <core:Icon src="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.icona'}" color="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.iconaColor'}" />
-                        <ObjectIdentifier text="{items>STATO_COLORE}" />
+                        <core:Icon src="{ parts: [ 'items>ICONA_COLORE' ], formatter: '.formatter.icona'}" color="{ parts: [ 'items>ICONA_COLORE'], formatter: '.formatter.iconaColor'}" />
+                        <!-- <ObjectIdentifier text="{items>STATO_COLORE}" /> -->
                         <core:Icon src="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColl'}" color="{ parts: [ 'items>ICONA_COLLAUDO'], formatter: '.formatter.iconaColor'}" />
-                        <ObjectIdentifier text="{items>STATO_COLLAUDO}" />
+                        <!-- <ObjectIdentifier text="{items>STATO_COLLAUDO}" /> -->
                         <ObjectIdentifier text="{items>STATUS}" />
                         <ObjectIdentifier text="{items>ARBPL}" />
                         <ObjectIdentifier text="{items>MENGE}" />
