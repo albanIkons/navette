@@ -101,6 +101,7 @@ sap.ui.define([
 
                 const requestBody = {//Create the structure fo deep entity
                     NAVNUM: (oNavnum == "") ? '&&' : oNavnum, //Header
+                    NAVDAT: sap.ui.getCore().byId("creazione").getDateValue(), //Header
                     navettatowip: [] // Item
                 };
 
