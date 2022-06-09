@@ -13,7 +13,6 @@ sap.ui.define([
      */
     function (BarcodeScanner, Controller, MessageBox, JSONModel, Fragment, Filter, FilterOperator, formatter) {
         "use strict";
-
         var oMagazzinoArrivo;
         var oMagazzinoPartenza;
         var oMagazzinoData;
@@ -57,6 +56,10 @@ sap.ui.define([
                 }];
                 this.Index = 1;
                 this._setModel(oItemData, "items");//Function to update the model
+
+                //Set the model for receive funcionality
+                oItemData = [];
+                this._setModel(oItemData, "items_ric");//Function to update the model
 
                 //Initialize Loader Model
                 const oModel = new JSONModel({
@@ -422,6 +425,7 @@ sap.ui.define([
                 } else {
                     const oNavetteInput = this.byId("recNavetteId");
                     oNavetteInput.setValue(oNaveteNumber);
+                    this.getNavettaListRic();
                 }
 
             },
@@ -769,31 +773,69 @@ sap.ui.define([
                 const oMainModel = this.getView().getModel("mainModel");
 
                 // Check that Navette number is not empty
-                if (oNavetteNr === "" || oWipInput === "") {
+                // if (oNavetteNr === "" || oWipInput === "") {
+                //     MessageBox.warning(oWarningMsg);
+                // } else {  // Make request to BE
+                //     that.receiveWipOut(oNavetteNr, oWipInput, oMainModel);
+                // }
+
+                // if (oNavetteNr !== "" || oWipInput !== "") {
+                //     that.receiveWipOut(oNavetteNr, oWipInput, oMainModel);
+                // }
+
+                // Check that Navette number is not empty
+                if (oNavetteNr === "") {
                     MessageBox.warning(oWarningMsg);
                 } else {  // Make request to BE
                     that.receiveWipOut(oNavetteNr, oWipInput, oMainModel);
                 }
+
             },
 
-            // Recieve navete nr & wip-out message ------------------------------------------------
+            // // Recieve navete nr & wip-out message ------------------------------------------------
             receiveWipOut: function (NavetteNr, WipInput, MainModel) {
                 const that = this;
                 const oModel = that.getView().getModel();
                 const oRecModel = this.getView().getModel("wipOutList");
-                var oRecData = [];
-                var oRecieve = {};
-                oRecieve.NAVNUM = NavetteNr;
-                oRecieve.WIP_OUT = WipInput;
+                // var oRecData = [];
+                // var oRecieve = {};
+                // oRecieve.NAVNUM = NavetteNr;
+                // oRecieve.WIP_OUT = WipInput;
 
-                if (typeof oRecModel !== 'undefined') oRecData = oRecModel.getData();
+                const requestBody = {//Create the structure fo deep entity
+                    NAVNUM: NavetteNr, //Header
+                    ricnavettatowip: [] // Item
+                };
+                const oTagTable = this.byId("table_ric");
+                const oSeleectedItems = oTagTable.getSelectedItems();
+                var oTags = [];
+
+                //Create the item section for the deep entity call
+                if (WipInput) {//one wipout only from input
+                    const oTempItems = {};
+                    oTempItems.NAVNUM = NavetteNr;
+                    oTempItems.WIP_OUT = WipInput;
+                    requestBody.ricnavettatowip.push(oTempItems);
+                } else {//wipouts from the list
+                    oSeleectedItems.forEach((e) => {
+                        const oItem = e.getBindingContext("items_ric").getProperty();
+                        const oTempItems = {};
+                        oTempItems.NAVNUM = NavetteNr;
+                        oTempItems.WIP_OUT = oItem.WIP_OUT;
+                        requestBody.ricnavettatowip.push(oTempItems);
+                    });
+                }
+
+                // if (typeof oRecModel !== 'undefined') oRecData = oRecModel.getData();
 
                 MainModel.setProperty("/receiveBusy", true);
-                oModel.create("/ricevi_navettaSet", oRecieve, {
+                oModel.create("/ricevi_navettaSet", requestBody, {
                     success: function (oData) {
-                        console.log(oData);
-                        oRecData.push(oData);
-                        that.getView().setModel(new JSONModel(oRecData), "wipOutList");
+                        // console.log(oData);
+                        // oRecData.push(oData);
+                        // that.getView().setModel(new JSONModel(oRecData), "wipOutList");
+                        // MessageBox.success(oData.MESSAGE);
+                        that.displayMessage(oData.ricnavettatowip.results, that);
                         MainModel.setProperty("/receiveBusy", false);
                     },
                     error: function (err) {
@@ -806,6 +848,76 @@ sap.ui.define([
                         MainModel.setProperty("/receiveBusy", false);
                     }
                 });
+            },
+
+            //Get the already saved navetta for ricevi
+            getNavettaListRic: function () {
+                this.getView().byId("recieveWipOutId").setValue("");
+                const that = this;
+                const oNavetta = this.getView().byId("recNavetteId").getValue();
+                const aFilter = new Filter('NAVNUM', FilterOperator.EQ, oNavetta);
+                const oItems = this.getView().getModel("items_ric").getData();//Get the values for our table model 
+                const oViewModel = this.getView().getModel("viewModel");
+
+                oViewModel.setProperty('/busy', true);
+                this.getView().getModel().read("/dati_navettaSet", {
+                    filters: [aFilter],
+                    success: function (oData) {
+                        //Clear the model and insert new wip-out
+                        oViewModel.setProperty('/busy', false);
+                        const oModel = that.getView().getModel("items_ric");
+                        oModel.setData(null);
+                        that._setModel(oData.results, "items_ric");//Function to update the model	
+
+                        //Save the pop up values for update navetta
+                        oMagazzinoArrivo = oData.results[0].LGORT;
+                        oMagazzinoPartenza = oData.results[0].UMLGO;
+                        oMagazzinoData = oData.results[0].ERDAT;
+                    },
+                    error: function (err) {
+                        oViewModel.setProperty('/busy', false);
+                        MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noNavetta"));
+                    }
+                });
+                this.getView().byId("recieveWipOutId").setEnabled(false);
+            },
+
+            //Display messages for ricevimento  
+            displayMessage: function (oData, that) {
+                var oMessagges = [];
+                if (oData.length !== 0) {
+                    for (var i = 0; i < oData.length; i++) {
+                        var oItemMsg = [{ message: "" }];
+                        oItemMsg.message = oData[i].MESSAGE + " per Wip Out " + oData[i].WIP_OUT;
+                        oMessagges.push(oItemMsg);
+                    }
+                    var oMsgModel = new sap.ui.model.json.JSONModel(oMessagges);
+                    that.getView().setModel(oMsgModel, "informationMsg");
+                    that._getDialog().open();
+                }
+            },
+
+            //Bind the messages and get the dialog
+            _getDialog: function () {
+                if (!this._oDialog) {
+                    this._oDialog = sap.ui.xmlfragment("npmnavette.navette.fragments.ricevimentoList", this);
+                    this.getView().addDependent(this._oDialog);
+                }
+                return this._oDialog;
+            },
+
+            //Close the dialog
+            onCloseDialog: function () {
+                this.onClearItemModelRic();
+                this._oDialog.close();
+            },
+
+            onClearItemModelRic: function () {
+                var oItemData = [];
+                this.Index = 1;
+                this._setModel(oItemData, "items_ric");//Function to update the model
+                this.getView().byId("recieveWipOutId").setEnabled(true);
+                // this.getView().byId("recNavetteId").setValue("");
             },
 
             //Split the input fields

@@ -21,9 +21,9 @@
                 </Toolbar>
             </form:toolbar>
             <Label text="{i18n>navetteNr}" required="true"/>
-            <Input id="recNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
+            <Input id="recNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaListRic"/>
 
-            <Label text="{i18n>wipout}" required="true"/>
+            <Label text="{i18n>wipout}" />
                 <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit"/>
         </form:SimpleForm>
 
@@ -47,13 +47,13 @@
             </HBox>
         </VBox>
 
-
+<!-- commented this part and added the create navette funcionality
         <Table id="wipOutTableId" items="{wipOutList>/}">
-            <!-- <headerToolbar>
+            <headerToolbar>
                 <OverflowToolbar>
                     <Title text="WIP Out (11)" />
                 </OverflowToolbar>
-            </headerToolbar> -->
+            </headerToolbar>
             <columns>
                 <Column demandPopin="true">
                     <Text text="Navette" wrapping="" />
@@ -67,11 +67,11 @@
             </columns>
             <items>
                 <ColumnListItem>
-                    <!-- <customData>
+                    <customData>
                         <core:CustomData key="mydata" 
                         value="{wipOutList>RCODE}" 
                         writeToDom="true"></core:CustomData>
-                    </customData> -->
+                    </customData>
                     <cells>
                         <ObjectIdentifier text="{wipOutList>NAVNUM}" />
                         <ObjectIdentifier text="{wipOutList>WIP_OUT}" />
@@ -79,6 +79,84 @@
                     </cells>
                 </ColumnListItem>
             </items>
-        </Table>
+        </Table> -->
+        <ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
+            <Table id="table_ric" items="{items_ric>/}" mode="MultiSelect">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="{i18n>itemText}" />
+                        <ToolbarSpacer />
+                        <!-- <Button text="{i18n>addWipOut}" icon="sap-icon://sys-add" press="onAddItemRic" /> -->
+                        <Button type="Reject" text="{i18n>pulisci}" icon="sap-icon://less" press="onClearItemModelRic" />
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : '18%'}">
+                        <Text text="{i18n>wipout}" />
+                    </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>ordine}" />
+                    </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : '14%'}">
+                        <Text text="{i18n>materiale}" />
+                    </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : '8%'}">
+                        <Text text="{i18n>descrMateriale}" />
+                    </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>Icona}" />
+                    </Column>
+                    <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>colore}" />
+                    </Column> -->
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="Collaudo" />
+                    </Column>
+                    <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="Collaudo" />
+                    </Column> -->
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="Stato Nav" />
+                    </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>centroLavoro}" />
+                    </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>quantita}" />
+                    </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>um}" />
+                    </Column>
+                    <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>rimuovi}" />
+                    </Column> -->
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+    
+                            <HBox>
+                                <Input key="{items_ric>WIP_OUT}" value="{items_ric>WIP_OUT}" submit="onWipSubmit" editable="false"/>
+                                <!-- <Button width="40px" class="sapUiTinyMarginBegin" icon="sap-icon://bar-code" type="Emphasized" id="b_field1_rec" press="onBtnScanPress" /> -->
+                            </HBox>
+    
+                            <ObjectIdentifier text="{items_ric>AUFNR}" />
+                            <ObjectIdentifier text="{items_ric>MATNR}" />
+                            <ObjectIdentifier text="{items_ric>MAKTX}" />
+                            <core:Icon src="{ parts: [ 'items_ric>ICONA_COLORE' ], formatter: '.formatter.icona'}" color="{ parts: [ 'items_ric>ICONA_COLORE'], formatter: '.formatter.iconaColor'}" />
+                            <!-- <ObjectIdentifier text="{items>STATO_COLORE}" /> -->
+                            <core:Icon src="{ parts: [ 'items_ric>ICONA_COLLAUDO'], formatter: '.formatter.iconaColl'}" color="{ parts: [ 'items_ric>ICONA_COLLAUDO'], formatter: '.formatter.iconaColor'}" />
+                            <!-- <ObjectIdentifier text="{items>STATO_COLLAUDO}" /> -->
+                            <ObjectIdentifier text="{items_ric>STATUS}" />
+                            <ObjectIdentifier text="{items_ric>ARBPL}" />
+                            <ObjectIdentifier text="{items_ric>MENGE}" />
+                            <ObjectIdentifier text="{items_ric>MEINS}" />
+                            <!-- <Button icon="sap-icon://delete" press="onDeleteItem" type="Reject" /> -->
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </ScrollContainer>
+
     </VBox>  
 </core:FragmentDefinition>
