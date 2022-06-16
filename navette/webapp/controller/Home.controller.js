@@ -194,6 +194,9 @@ sap.ui.define([
                 const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
                 const oViewModel = this.getView().getModel("viewModel");
 
+                //Clear the wip out input
+                this.getView().byId("recieveWipOutIdCr").setValue("");
+
                 oViewModel.setProperty('/busy', true);
                 this.getView().getModel().read("/dati_navettaSet", {
                     filters: [aFilter],
@@ -284,7 +287,11 @@ sap.ui.define([
                 const oViewModel = this.getView().getModel("viewModel");
 
                 if (this._viewKey === 'create') {
-                    this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
+                    //We add this line of code in order to avoid the error when we 
+                    //call the entity from the main wip out insteda of the items wip out
+                    if (oEvent.getSource().sId.substring((oEvent.getSource().sId.length - 17)) != 'recieveWipOutIdCr') {
+                        this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
+                    }
                 }
                 if (oNavnum) {
                     oFilter = new Filter("NAVNUM", FilterOperator.EQ, oNavnum);
@@ -337,9 +344,15 @@ sap.ui.define([
 
                 if (this._viewKey === 'create') { // Do this logic only in creation page
                     if (!oSelectedItem) return;
-                    //Call the wip out details
-                    this.onInsertWip(oWipOut, '');
 
+                    //Here we handle the call depending from which wip out input is called
+                    if (oEvent.getSource().sId.substring((oEvent.getSource().sId.length - 17)) != 'recieveWipOutIdCr') {
+                        //Call the wip out details
+                        this.onInsertWip(oWipOut, '');
+                    } else {
+                        //Call the related wip out
+                        this.onWipSubmitCr();
+                    }
                 } else { // For recieve page ----------------------------------------------
                     const oWipInput = this.byId("recieveWipOutId");
                     oWipInput.setValue(oWipOut);
@@ -594,6 +607,7 @@ sap.ui.define([
                     this.getView().byId("recieveWipOutId").setValue("");
                     this.getView().byId("transferNavetteId").setValue("");
                     this.getView().byId("navetteIdCreate").setValue("");
+                    this.getView().byId("recieveWipOutIdCr").setValue("");
                     this.onClearItemModel();
                 } else if (oKey == "transfer") {
                     this._showFooter(false);
@@ -601,6 +615,7 @@ sap.ui.define([
                     this.getView().byId("recieveWipOutId").setValue("");
                     this.getView().byId("transferNavetteId").setValue("");
                     this.getView().byId("navetteIdCreate").setValue("");
+                    this.getView().byId("recieveWipOutIdCr").setValue("");
                     this.onClearItemModel();
                 } else if (oKey == "receive") {
                     this._showFooter(false);
@@ -608,6 +623,7 @@ sap.ui.define([
                     this.getView().byId("recieveWipOutId").setValue("");
                     this.getView().byId("transferNavetteId").setValue("");
                     this.getView().byId("navetteIdCreate").setValue("");
+                    this.getView().byId("recieveWipOutIdCr").setValue("");
                     this.onClearItemModel();
                 }
             },
@@ -705,6 +721,38 @@ sap.ui.define([
                         break;
                 }
                 return aFilter;
+            },
+
+            //Get the related wipouts and fill the item model
+            onWipSubmitCr: function () {
+                const oWipout = this.getView().byId("recieveWipOutIdCr").getValue();
+                const aFilter = new Filter('WIP_OUT', FilterOperator.EQ, oWipout);
+                const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
+                const oViewModel = this.getView().getModel("viewModel");
+                const that = this;
+
+                //Clear the navetta number input
+                this.getView().byId("navetteIdCreate").setValue("");
+
+                oViewModel.setProperty('/busy', true);
+                this.getView().getModel().read("/dati_odpSet", {
+                    filters: [aFilter],
+                    success: function (oData) {
+                        oViewModel.setProperty('/busy', false);
+                        if (oData.results.length > 0) {
+                            //Clear the model and insert new wip-out
+                            const oModel = that.getView().getModel("items");
+                            oModel.setData(null);
+                            that._setModel(oData.results, "items");//Function to update the model	
+                        } else {
+                            MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("nessunWip"));
+                        }
+                    },
+                    error: function (err) {
+                        oViewModel.setProperty('/busy', false);
+                        MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("nessunWip"));
+                    }
+                });
             },
             //********************************************TRANSFER NAVETTA*************************************************************************//            
             // Event handler for Transfer Navetta press 
@@ -893,12 +941,12 @@ sap.ui.define([
                     }
                     var oMsgModel = new sap.ui.model.json.JSONModel(oMessagges);
                     that.getView().setModel(oMsgModel, "informationMsg");
-                    that._getDialog().open();
+                    that._getDialogMessagge().open();
                 }
             },
 
             //Bind the messages and get the dialog
-            _getDialog: function () {
+            _getDialogMessage: function () {
                 if (!this._oDialog) {
                     this._oDialog = sap.ui.xmlfragment("npmnavette.navette.fragments.ricevimentoList", this);
                     this.getView().addDependent(this._oDialog);

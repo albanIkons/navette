@@ -24,7 +24,7 @@
             <Input id="recNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaListRic"/>
 
             <Label text="{i18n>wipout}" />
-                <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit"/>
+            <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit"/>
         </form:SimpleForm>
 
         <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->

@@ -7,6 +7,9 @@
         </form:toolbar>
         <Label text="{i18n>navetteNr}" />
         <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaList" />
+
+        <Label text="{i18n>wipout}" />
+        <Input id="recieveWipOutIdCr" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmitCr"/>
     </form:SimpleForm>
 
     <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->
