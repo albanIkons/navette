@@ -285,11 +285,12 @@ sap.ui.define([
                 const oNavnum = this.getView().byId("recNavetteId").getValue();
                 var oFilter = [];
                 const oViewModel = this.getView().getModel("viewModel");
+                this.WipID = oEvent.getSource().sId.substring((oEvent.getSource().sId.length - 17));
 
                 if (this._viewKey === 'create') {
                     //We add this line of code in order to avoid the error when we 
                     //call the entity from the main wip out insteda of the items wip out
-                    if (oEvent.getSource().sId.substring((oEvent.getSource().sId.length - 17)) != 'recieveWipOutIdCr') {
+                    if (this.WipID != 'recieveWipOutIdCr') {
                         this.SelectedIndex = oEvent.getSource().getBindingContext("items").getObject().index;//Get the selected index 
                     }
                 }
@@ -346,7 +347,7 @@ sap.ui.define([
                     if (!oSelectedItem) return;
 
                     //Here we handle the call depending from which wip out input is called
-                    if (oEvent.getSource().sId.substring((oEvent.getSource().sId.length - 17)) != 'recieveWipOutIdCr') {
+                    if (this.WipID != 'recieveWipOutIdCr') {
                         //Call the wip out details
                         this.onInsertWip(oWipOut, '');
                     } else {
@@ -743,7 +744,10 @@ sap.ui.define([
                             //Clear the model and insert new wip-out
                             const oModel = that.getView().getModel("items");
                             oModel.setData(null);
-                            that._setModel(oData.results, "items");//Function to update the model	
+                            for(var i = 0; i < oData.results.length; i++){
+                                oItems.push(oData.results[i]);
+                            }
+                            that._setModel(oItems, "items");//Function to update the model	
                         } else {
                             MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("nessunWip"));
                         }

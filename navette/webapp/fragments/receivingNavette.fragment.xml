@@ -97,12 +97,12 @@
                     <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                         <Text text="{i18n>ordine}" />
                     </Column>
-                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : '14%'}">
+                    <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : '14%'}">
                         <Text text="{i18n>materiale}" />
                     </Column>
                     <Column width="{= ${mainModel>/mobile} === true ? '150px' : '8%'}">
-                        <Text text="{i18n>descrMateriale}" />
-                    </Column>
+                        <Text text="{i18n>descrMateriale}" /> -->
+                    <!-- </Column> -->
                     <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                         <Text text="{i18n>Icona}" />
                     </Column>
@@ -141,8 +141,8 @@
                             </HBox>
     
                             <ObjectIdentifier text="{items_ric>AUFNR}" />
-                            <ObjectIdentifier text="{items_ric>MATNR}" />
-                            <ObjectIdentifier text="{items_ric>MAKTX}" />
+                            <!-- <ObjectIdentifier text="{items_ric>MATNR}" />
+                            <ObjectIdentifier text="{items_ric>MAKTX}" /> -->
                             <core:Icon src="{ parts: [ 'items_ric>ICONA_COLORE' ], formatter: '.formatter.icona'}" color="{ parts: [ 'items_ric>ICONA_COLORE'], formatter: '.formatter.iconaColor'}" />
                             <!-- <ObjectIdentifier text="{items>STATO_COLORE}" /> -->
                             <core:Icon src="{ parts: [ 'items_ric>ICONA_COLLAUDO'], formatter: '.formatter.iconaColl'}" color="{ parts: [ 'items_ric>ICONA_COLLAUDO'], formatter: '.formatter.iconaColor'}" />
