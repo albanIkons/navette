@@ -91,7 +91,7 @@
                     </OverflowToolbar>
                 </headerToolbar>
                 <columns>
-                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : '18%'}">
+                    <Column width="{= ${mainModel>/mobile} === true ? '200px' : '25%'}">
                         <Text text="{i18n>wipout}" />
                     </Column>
                     <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
@@ -103,7 +103,7 @@
                     <Column width="{= ${mainModel>/mobile} === true ? '150px' : '8%'}">
                         <Text text="{i18n>descrMateriale}" /> -->
                     <!-- </Column> -->
-                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Column width="{= ${mainModel>/mobile} === true ? '100px' : 'auto'}">
                         <Text text="{i18n>Icona}" />
                     </Column>
                     <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
@@ -115,7 +115,7 @@
                     <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                         <Text text="Collaudo" />
                     </Column> -->
-                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Column width="{= ${mainModel>/mobile} === true ? '100px' : 'auto'}">
                         <Text text="Stato Nav" />
                     </Column>
                     <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
@@ -124,7 +124,7 @@
                     <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                         <Text text="{i18n>quantita}" />
                     </Column>
-                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Column width="{= ${mainModel>/mobile} === true ? '100px' : 'auto'}">
                         <Text text="{i18n>um}" />
                     </Column>
                     <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
