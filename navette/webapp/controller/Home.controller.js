@@ -85,7 +85,7 @@ sap.ui.define([
                 if (oNavnum) {
                     sap.ui.getCore().byId("partenza").setValue(oMagazzinoPartenza);
                     sap.ui.getCore().byId("arrivo__").setValue(oMagazzinoArrivo);
-                    sap.ui.getCore().byId("creazione").setValue(oMagazzinoData);
+                    // sap.ui.getCore().byId("creazione").setValue(oMagazzinoData);
                 } else {
                     //Clear pop up input fields
                     sap.ui.getCore().byId("partenza").setValue("");
@@ -131,7 +131,7 @@ sap.ui.define([
 
                 //Call the deep entity
                 oViewModel.setProperty('/busy', true);
-                this.getView().getModel().create("/update_navettaSet", requestBody, {
+                this.getOwnerComponent().getModel().create("/update_navettaSet", requestBody, {
                     success: function (oData) {
                         oViewModel.setProperty('/busy', false);
                         that.onCloseDialog();
@@ -198,7 +198,7 @@ sap.ui.define([
                 this.getView().byId("recieveWipOutIdCr").setValue("");
 
                 oViewModel.setProperty('/busy', true);
-                this.getView().getModel().read("/dati_navettaSet", {
+                this.getOwnerComponent().getModel().read("/dati_navettaSet", {
                     filters: [aFilter],
                     success: function (oData) {
                         //Clear the model and insert new wip-out
@@ -210,7 +210,14 @@ sap.ui.define([
                         //Save the pop up values for update navetta
                         oMagazzinoArrivo = oData.results[0].LGORT;
                         oMagazzinoPartenza = oData.results[0].UMLGO;
-                        oMagazzinoData = oData.results[0].ERDAT;
+                        // oMagazzinoData = oData.results[0].ERDAT;
+                        // oMagazzinoData = sap.ui.core.format.DateFormat.getDateInstance({pattern : "YYYY/MM/DD" }).format(oData.results[0].ERDAT) + "" + new Date().getFullYear(); 
+
+                        var oModelDate = new JSONModel();
+                        oModelDate.setData({
+                            dateValue: oData.results[0].ERDAT
+                        });
+                        that.getView().setModel(oModelDate);
                     },
                     error: function (err) {
                         oViewModel.setProperty('/busy', false);
@@ -228,7 +235,7 @@ sap.ui.define([
                 const oViewModel = this.getView().getModel("viewModel");
 
                 oViewModel.setProperty('/busy', true);
-                that.getView().getModel().read("/get_lgortSet", {
+                this.getOwnerComponent().getModel().read("/get_lgortSet", {
                     success: function (oData) {
                         oViewModel.setProperty('/busy', false);
                         that.getView().setModel(new JSONModel(oData.results), "magazzinoHelp");
@@ -299,7 +306,7 @@ sap.ui.define([
                 }
 
                 oViewModel.setProperty('/busy', true);
-                this.getView().getModel().read("/get_wipSet", {
+                this.getOwnerComponent().getModel().read("/get_wipSet", {
                     filters: [oFilter],
                     success: function (oData) {
                         oViewModel.setProperty('/busy', false);
@@ -384,7 +391,7 @@ sap.ui.define([
                 }
 
                 oViewModel.setProperty('/busy', true);
-                this.getView().getModel().read("/get_navnumSet", {
+                this.getOwnerComponent().getModel().read("/get_navnumSet", {
                     filters: oFilter,
                     success: function (oData) {
                         oViewModel.setProperty('/busy', false);
@@ -472,7 +479,7 @@ sap.ui.define([
 
                 if (!oCheckWip) {//Add wip only in case is not already used
                     oViewModel.setProperty('/busy', true);
-                    this.getView().getModel().read("/get_wipdataSet", {
+                    this.getOwnerComponent().getModel().read("/get_wipdataSet", {
                         filters: [aFilter],
                         success: function (oData) {
                             oViewModel.setProperty('/busy', false);
@@ -566,7 +573,7 @@ sap.ui.define([
                 var oItems = this.getView().getModel("items").getData();//Get the values for our model and save it in a variable
 
                 for (var i = 0; i < oItems.length; i++) {
-                    if (oItems[i].index == oDeleteRecord.index) {
+                    if (oItems[i].WIP_OUT == oDeleteRecord.WIP_OUT) {
                         oItems.splice(i, 1);//Remove 1 record from i index
                         break;
                     }
@@ -736,7 +743,7 @@ sap.ui.define([
                 this.getView().byId("navetteIdCreate").setValue("");
 
                 oViewModel.setProperty('/busy', true);
-                this.getView().getModel().read("/dati_odpSet", {
+                this.getOwnerComponent().getModel().read("/dati_odpSet", {
                     filters: [aFilter],
                     success: function (oData) {
                         oViewModel.setProperty('/busy', false);
@@ -790,7 +797,7 @@ sap.ui.define([
             // Make request on BE to Transfer selected Navette
             trasferNavette: function (NavetteNr, MainModel) {
                 const that = this;
-                const oModel = that.getView().getModel();
+                const oModel = that.getOwnerComponent().getModel();
                 const oTransfer = { NAVNUM: NavetteNr };
 
                 oModel.create("/trasf_navettaSet", oTransfer, {
@@ -847,7 +854,7 @@ sap.ui.define([
             // // Recieve navete nr & wip-out message ------------------------------------------------
             receiveWipOut: function (NavetteNr, WipInput, MainModel) {
                 const that = this;
-                const oModel = that.getView().getModel();
+                const oModel = that.getOwnerComponent().getModel();
                 const oRecModel = this.getView().getModel("wipOutList");
                 // var oRecData = [];
                 // var oRecieve = {};
@@ -912,7 +919,7 @@ sap.ui.define([
                 const oViewModel = this.getView().getModel("viewModel");
 
                 oViewModel.setProperty('/busy', true);
-                this.getView().getModel().read("/dati_navettaSet", {
+                this.getOwnerComponent().getModel().read("/dati_navettaSet", {
                     filters: [aFilter],
                     success: function (oData) {
                         //Clear the model and insert new wip-out

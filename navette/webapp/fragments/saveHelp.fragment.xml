@@ -26,7 +26,8 @@
                                     <ColumnListItem>
                                         <cells>
                                             <Text text="{i18n>creazione}" />
-                                                <DatePicker id="creazione" placeholder="Enter Date" change="handleChange" class="sapUiSmallMarginBottom" required="true" />
+                                                <DatePicker id="creazione" placeholder="Enter Date" change="handleChange" class="sapUiSmallMarginBottom" required="true" 
+                                                            value="{path:'/dateValue', type:'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true}}"/>
                                         </cells>
                                     </ColumnListItem>
                                 </items>
