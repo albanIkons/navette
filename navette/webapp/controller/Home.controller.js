@@ -945,7 +945,7 @@ sap.ui.define([
                     }
                     var oMsgModel = new sap.ui.model.json.JSONModel(oMessagges);
                     that.getView().setModel(oMsgModel, "informationMsg");
-                    that._getDialogMessagge().open();
+                    that._getDialogMessage().open();
                 }
             },
 
