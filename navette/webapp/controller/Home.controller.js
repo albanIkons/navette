@@ -958,17 +958,17 @@ sap.ui.define([
 
             //Bind the messages and get the dialog
             _getDialogMessage: function () {
-                if (!this._oDialog) {
-                    this._oDialog = sap.ui.xmlfragment("npmnavette.navette.fragments.ricevimentoList", this);
-                    this.getView().addDependent(this._oDialog);
+                if (!this._oDialogMessage) {
+                    this._oDialogMessage = sap.ui.xmlfragment("npmnavette.navette.fragments.ricevimentoList", this);
+                    this.getView().addDependent(this._oDialogMessage);
                 }
-                return this._oDialog;
+                return this._oDialogMessage;
             },
 
             //Close the dialog
-            onCloseDialog: function () {
+            onCloseDialogMessage: function () {
                 this.onClearItemModelRic();
-                this._oDialog.close();
+                this._getDialogMessage.close();
             },
 
             onClearItemModelRic: function () {
