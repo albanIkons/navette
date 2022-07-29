@@ -968,7 +968,7 @@ sap.ui.define([
             //Close the dialog
             onCloseDialogMessage: function () {
                 this.onClearItemModelRic();
-                this._getDialogMessage.close();
+                this._oDialogMessage.close();
             },
 
             onClearItemModelRic: function () {
