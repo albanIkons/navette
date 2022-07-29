@@ -9,13 +9,12 @@
     "sapui5"
   ],
   "main": "webapp/index.html",
-  "dependencies": {
-    "nwabap-ui5uploader": "^1.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@sap/ux-ui5-fe-mockserver-middleware": "1",
     "@sap/ux-ui5-tooling": "1",
-    "@ui5/cli": "^2.14.1"
+    "@ui5/cli": "^2.14.1",
+    "nwabap-ui5uploader": "^1.2.0"
   },
   "scripts": {
     "start": "fiori run --open \"test/flpSandbox.html?sap-client=100&sap-ui-xx-viewCache=false#npmnavettenavette-display\"",
