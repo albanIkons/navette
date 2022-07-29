@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<Dialog id="msgDialog" title="Informazione su Ricevimento">
 		<beginButton>
-			<Button text="Ok" press=".onCloseDialog"/>
+			<Button text="Ok" press=".onCloseDialogMessage"/>
 		</beginButton>
 			<content>
 				<SelectList items="{informationMsg>/}">
