@@ -75,11 +75,7 @@ sap.ui.define([
                 const oItemsChecked = this.checkItems(oItems);
                 const oNavnum = this.getView().byId("navetteIdCreate").getValue();
 
-                // if(oItemsChecked.length > 0){//Controll if we have at least one wip out inserted
                 this._getDialog().open();//Call the dialog to insert magazzino and date
-                // } else {
-                //     MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("noItems"));//error no wip outs inserted
-                // }
 
                 //Set the pop up values in case of update
                 if (oNavnum) {
@@ -139,7 +135,7 @@ sap.ui.define([
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
                             MessageBox.success("La navetta " + oData.navettatowip.results[0].NAVNUM + " e stata aggiornata");//Sucessful update
                         } else {
-                            MessageBox.success("La navetta " + oNavnum + " e stata creata");//Sucessful update
+                            MessageBox.success("La navetta " + oData.navettatowip.results[0].NAVNUM+ " e stata creata");//Sucessful update
                         }
                     },
                     error: function (err) {
@@ -751,8 +747,14 @@ sap.ui.define([
                             //Clear the model and insert new wip-out
                             const oModel = that.getView().getModel("items");
                             oModel.setData(null);
-                            for(var i = 0; i < oData.results.length; i++){
+                            for (var i = 0; i < oData.results.length; i++) {
                                 oItems.push(oData.results[i]);
+                            }
+                            //delete emtpy items
+                            for (var j = 0; j < oItems.length; j++) {
+                                if(!oItems[j].NAVNUM){
+                                    oItems.splice(j,1);
+                                }
                             }
                             that._setModel(oItems, "items");//Function to update the model	
                         } else {
