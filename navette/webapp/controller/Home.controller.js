@@ -119,6 +119,8 @@ sap.ui.define([
                     oTempItems.MEINS = oItems[i].MEINS;
                     oTempItems.RUECK = oItems[i].RUECK;
                     oTempItems.RMZHL = oItems[i].RMZHL;
+                    oTempItems.STATO_COLLAUDO = oItems[i].STATO_COLLAUDO;
+                    oTempItems.STATO_COLORE = oItems[i].STATO_COLORE;
                     // oTempItems.ERDAT = new Date(sap.ui.getCore().byId("creazione").getValue());
                     oTempItems.ERDAT = sap.ui.getCore().byId("creazione").getDateValue();
 
@@ -135,8 +137,9 @@ sap.ui.define([
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
                             MessageBox.success("La navetta " + oData.navettatowip.results[0].NAVNUM + " e stata aggiornata");//Sucessful update
                         } else {
-                            MessageBox.success("La navetta " + oData.navettatowip.results[0].NAVNUM+ " e stata creata");//Sucessful update
+                            MessageBox.success("La navetta " + oData.navettatowip.results[0].NAVNUM + " e stata creata");//Sucessful update
                         }
+                        that.onAddItem();
                     },
                     error: function (err) {
                         oViewModel.setProperty('/busy', false);
@@ -147,6 +150,7 @@ sap.ui.define([
                         } else {
                             MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("createError"));//error creation
                         }
+                        that.onAddItem();
                     }
                 });
 
@@ -752,8 +756,8 @@ sap.ui.define([
                             }
                             //delete emtpy items
                             for (var j = 0; j < oItems.length; j++) {
-                                if(!oItems[j].NAVNUM){
-                                    oItems.splice(j,1);
+                                if (!oItems[j].NAVNUM) {
+                                    oItems.splice(j, 1);
                                 }
                             }
                             that._setModel(oItems, "items");//Function to update the model	
@@ -921,7 +925,7 @@ sap.ui.define([
                 const oViewModel = this.getView().getModel("viewModel");
 
                 oViewModel.setProperty('/busy', true);
-                this.getOwnerComponent().getModel().read("/dati_navettaSet", {
+                this.getOwnerComponent().getModel().read("/dati_navettancSet", {
                     filters: [aFilter],
                     success: function (oData) {
                         //Clear the model and insert new wip-out
@@ -989,6 +993,5 @@ sap.ui.define([
                     return iValue;
                 }
             },
-
         });
     });
