@@ -735,9 +735,10 @@ sap.ui.define([
             onWipSubmitCr: function () {
                 const oWipout = this.getView().byId("recieveWipOutIdCr").getValue();
                 const aFilter = new Filter('WIP_OUT', FilterOperator.EQ, oWipout);
-                const oItems = this.getView().getModel("items").getData();//Get the values for our table model 
+                var oItems = this.getView().getModel("items").getData();//Get the values for our table model 
                 const oViewModel = this.getView().getModel("viewModel");
                 const that = this;
+                var oTempItem = [];
 
                 //Clear the navetta number input
                 this.getView().byId("navetteIdCreate").setValue("");
@@ -756,10 +757,13 @@ sap.ui.define([
                             }
                             //delete emtpy items
                             for (var j = 0; j < oItems.length; j++) {
-                                if (!oItems[j].NAVNUM) {
-                                    oItems.splice(j, 1);
+                                if (oItems[j].WIP_OUT) {
+                                    // oItems.splice(j, 1);
+                                    oTempItem.push(oItems[j]);
                                 }
                             }
+                            oItems = [];//Clear items and insert the correct one from the temporary table
+                            oItems = oTempItem;
                             that._setModel(oItems, "items");//Function to update the model	
                         } else {
                             MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("nessunWip"));

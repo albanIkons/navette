@@ -1,4 +1,4 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" >
 	<SelectDialog  title="{i18n>magazzino}" items="{magazzinoHelp>/}" search=".onHelpSearchMagazzino" confirm=".onHelpCloseMagazzino" cancel=".onHelpCloseMagazzino">
 		<StandardListItem title="{magazzinoHelp>LGORT}" key="{magazzinoHelp>LGORT}" description="{magazzinoHelp>LGOBE}" />
 	</SelectDialog>
