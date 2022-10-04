@@ -101,6 +101,7 @@ sap.ui.define([
                 const requestBody = {//Create the structure fo deep entity
                     NAVNUM: (oNavnum == "") ? '&&' : oNavnum, //Header
                     NAVDAT: sap.ui.getCore().byId("creazione").getDateValue(), //Header
+                    OPERATORE: this.getView().byId("recieveOperatoreIdCr").getValue(),
                     navettatowip: [] // Item
                 };
 
@@ -211,7 +212,8 @@ sap.ui.define([
                         oMagazzinoArrivo = oData.results[0].LGORT;
                         oMagazzinoPartenza = oData.results[0].UMLGO;
                         // oMagazzinoData = oData.results[0].ERDAT;
-                        // oMagazzinoData = sap.ui.core.format.DateFormat.getDateInstance({pattern : "YYYY/MM/DD" }).format(oData.results[0].ERDAT) + "" + new Date().getFullYear(); 
+                        // oMagazzinoData = sap.ui.core.format.DateFormat.getDateInstance({pattern : "YYYY/MM/DD" }).format(oData.results[0].ERDAT) + "" + new Date().getFullYear();
+                        that.getView().byId("recieveOperatoreIdCr").setValue(oData.results[0].OPERATORE); 
 
                         var oModelDate = new JSONModel();
                         oModelDate.setData({
@@ -492,6 +494,7 @@ sap.ui.define([
                                             that._setModel(oItems, "items");//Function to update the model	
                                             break;
                                         }
+                                        that.getView().byId("recieveOperatoreIdCr").setValue(oData.results[0].OPERATORE);
                                     } else {
                                         // MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("wipoutUsed"));//Wip out already used
                                         MessageBox.error(oData.results[0].MESSAGE);
@@ -616,6 +619,8 @@ sap.ui.define([
                     this.getView().byId("transferNavetteId").setValue("");
                     this.getView().byId("navetteIdCreate").setValue("");
                     this.getView().byId("recieveWipOutIdCr").setValue("");
+                    this.getView().byId("recieveOperatoreIdCr").setValue("");
+                    this.getView().byId("transferOperatoreId").setValue("");
                     this.onClearItemModel();
                 } else if (oKey == "transfer") {
                     this._showFooter(false);
@@ -624,6 +629,8 @@ sap.ui.define([
                     this.getView().byId("transferNavetteId").setValue("");
                     this.getView().byId("navetteIdCreate").setValue("");
                     this.getView().byId("recieveWipOutIdCr").setValue("");
+                    this.getView().byId("recieveOperatoreIdCr").setValue("");
+                    this.getView().byId("transferOperatoreId").setValue("");
                     this.onClearItemModel();
                 } else if (oKey == "receive") {
                     this._showFooter(false);
@@ -632,6 +639,8 @@ sap.ui.define([
                     this.getView().byId("transferNavetteId").setValue("");
                     this.getView().byId("navetteIdCreate").setValue("");
                     this.getView().byId("recieveWipOutIdCr").setValue("");
+                    this.getView().byId("recieveOperatoreIdCr").setValue("");
+                    this.getView().byId("transferOperatoreId").setValue("");
                     this.onClearItemModel();
                 }
             },
@@ -765,6 +774,7 @@ sap.ui.define([
                             oItems = [];//Clear items and insert the correct one from the temporary table
                             oItems = oTempItem;
                             that._setModel(oItems, "items");//Function to update the model	
+                            that.getView().byId("recieveOperatoreIdCr").setValue(oData.results[0].OPERATORE);
                         } else {
                             MessageBox.error(that.getView().getModel("i18n").getResourceBundle().getText("nessunWip"));
                         }
@@ -942,6 +952,7 @@ sap.ui.define([
                         oMagazzinoArrivo = oData.results[0].LGORT;
                         oMagazzinoPartenza = oData.results[0].UMLGO;
                         oMagazzinoData = oData.results[0].ERDAT;
+                        that.getView().byId("recieveOperatoreIdCr").setValue(oData.results[0].OPERATORE);
                     },
                     error: function (err) {
                         oViewModel.setProperty('/busy', false);

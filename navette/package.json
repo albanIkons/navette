@@ -9,7 +9,6 @@
     "sapui5"
   ],
   "main": "webapp/index.html",
-  "dependencies": {},
   "devDependencies": {
     "@sap/ux-ui5-fe-mockserver-middleware": "1",
     "@sap/ux-ui5-tooling": "1",

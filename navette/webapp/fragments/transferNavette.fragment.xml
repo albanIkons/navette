@@ -22,6 +22,9 @@
         </form:toolbar>
         <Label text="{i18n>navetteNr}" required="true"/>
         <Input id="transferNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp"/>
+
+        <Label text="{i18n>operatore}" />
+        <Input id="transferOperatoreId" editable="false"/>
     </form:SimpleForm>
 
     <VBox class="sapUiSmallMargin">

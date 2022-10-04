@@ -1,30 +1,21 @@
-<core:FragmentDefinition    height="100%" 
-                            xmlns="sap.m" 
-                            xmlns:f="sap.f"
-                            xmlns:l="sap.ui.layout" 
-                            xmlns:core="sap.ui.core"
-                            xmlns:form="sap.ui.layout.form" >
-    <VBox busy="{mainModel>/receiveBusy}">                      
-        <form:SimpleForm 
-                        columnsXL="3"
-                        columnsL="2"  
-                        columnsM="1" 
-                        layout="ColumnLayout" 
-                        labelSpanXL="3"
-                        labelSpanL="3"
-                        labelSpan="3">
+<core:FragmentDefinition height="100%" xmlns="sap.m" xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
+    <VBox busy="{mainModel>/receiveBusy}">
+        <form:SimpleForm columnsXL="3" columnsL="2" columnsM="1" layout="ColumnLayout" labelSpanXL="3" labelSpanL="3" labelSpan="3">
             <form:toolbar>
-                <Toolbar >
-                    <Title text="{i18n>riceviNavette}"/>
+                <Toolbar>
+                    <Title text="{i18n>riceviNavette}" />
                     <ToolbarSpacer />
-                    <Button icon="sap-icon://trend-up" text="{i18n>esegui}" press="onReceivePress"/>
+                    <Button icon="sap-icon://trend-up" text="{i18n>esegui}" press="onReceivePress" />
                 </Toolbar>
             </form:toolbar>
-            <Label text="{i18n>navetteNr}" required="true"/>
-            <Input id="recNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaListRic"/>
+            <Label text="{i18n>navetteNr}" required="true" />
+            <Input id="recNavetteId" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaListRic" />
 
             <Label text="{i18n>wipout}" />
-            <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit"/>
+            <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit" />
+
+            <Label text="{i18n>operatore}" />
+            <Input id="recieveOperatoreId" editable="false"/>
         </form:SimpleForm>
 
         <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->
@@ -33,10 +24,10 @@
             <Label text="{i18n>selNavetta}" />
             <HBox class="sapUiTinyMarginTopBottom">
                 <VBox class="sapUiMediumMarginEnd">
-                    <CheckBox id="NC_R" text="NC" selected="false"/>
+                    <CheckBox id="NC_R" text="NC" selected="false" />
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd">
-                    <CheckBox id="NT_R" text="NT" selected="false"  />
+                    <CheckBox id="NT_R" text="NT" selected="false" />
                 </VBox>
                 <VBox class="sapUiMediumMarginEnd">
                     <CheckBox id="WR_R" text="WR" selected="false" />
@@ -47,7 +38,7 @@
             </HBox>
         </VBox>
 
-<!-- commented this part and added the create navette funcionality
+        <!-- commented this part and added the create navette funcionality
         <Table id="wipOutTableId" items="{wipOutList>/}">
             <headerToolbar>
                 <OverflowToolbar>
@@ -91,7 +82,7 @@
                     </OverflowToolbar>
                 </headerToolbar>
                 <columns>
-                    <Column width="{= ${mainModel>/mobile} === true ? '200px' : '25%'}">
+                    <Column width="{= ${mainModel>/mobile} === true ? '200px' : '20%'}">
                         <Text text="{i18n>wipout}" />
                     </Column>
                     <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
@@ -127,6 +118,12 @@
                     <Column width="{= ${mainModel>/mobile} === true ? '100px' : 'auto'}">
                         <Text text="{i18n>um}" />
                     </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>condat}" />
+                    </Column>
+                    <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                        <Text text="{i18n>laeda}" />
+                    </Column>
                     <!-- <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                         <Text text="{i18n>rimuovi}" />
                     </Column> -->
@@ -134,12 +131,11 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-    
                             <HBox>
-                                <Input key="{items_ric>WIP_OUT}" value="{items_ric>WIP_OUT}" submit="onWipSubmit" editable="false"/>
+                                <Input key="{items_ric>WIP_OUT}" value="{items_ric>WIP_OUT}" submit="onWipSubmit" editable="false" />
                                 <!-- <Button width="40px" class="sapUiTinyMarginBegin" icon="sap-icon://bar-code" type="Emphasized" id="b_field1_rec" press="onBtnScanPress" /> -->
                             </HBox>
-    
+
                             <ObjectIdentifier text="{items_ric>AUFNR}" />
                             <!-- <ObjectIdentifier text="{items_ric>MATNR}" />
                             <ObjectIdentifier text="{items_ric>MAKTX}" /> -->
@@ -151,12 +147,13 @@
                             <ObjectIdentifier text="{items_ric>ARBPL}" />
                             <ObjectIdentifier text="{items_ric>MENGE}" />
                             <ObjectIdentifier text="{items_ric>MEINS}" />
+                            <ObjectIdentifier text="{items_ric>CONDAT}" />
+                            <ObjectIdentifier text="{items_ric>LAEDA}" />
                             <!-- <Button icon="sap-icon://delete" press="onDeleteItem" type="Reject" /> -->
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
         </ScrollContainer>
-
-    </VBox>  
+    </VBox>
 </core:FragmentDefinition>

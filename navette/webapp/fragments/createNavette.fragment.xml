@@ -9,7 +9,10 @@
         <Input id="navetteIdCreate" showValueHelp="true" valueHelpRequest=".onNavetteHelp" submit="getNavettaList" />
 
         <Label text="{i18n>wipout}" />
-        <Input id="recieveWipOutIdCr" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmitCr"/>
+        <Input id="recieveWipOutIdCr" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmitCr" />
+
+        <Label text="{i18n>operatore}" />
+        <Input id="recieveOperatoreIdCr" />
     </form:SimpleForm>
 
     <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->
@@ -33,7 +36,6 @@
     </VBox>
 
     <ScrollContainer height="100%" width="100%" vertical="true" focusable="true">
-
         <Table id="table" items="{items>/}">
             <headerToolbar>
                 <OverflowToolbar>
@@ -81,13 +83,18 @@
                     <Text text="{i18n>um}" />
                 </Column>
                 <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>condat}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
+                    <Text text="{i18n>laeda}" />
+                </Column>
+                <Column width="{= ${mainModel>/mobile} === true ? '150px' : 'auto'}">
                     <Text text="{i18n>rimuovi}" />
                 </Column>
             </columns>
             <items>
                 <ColumnListItem>
                     <cells>
-
                         <HBox>
                             <Input key="{items>WIP_OUT}" value="{items>WIP_OUT}" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit" />
                             <Button width="40px" class="sapUiTinyMarginBegin" icon="sap-icon://bar-code" type="Emphasized" id="b_field1" press="onBtnScanPress" />
@@ -104,11 +111,12 @@
                         <ObjectIdentifier text="{items>ARBPL}" />
                         <ObjectIdentifier text="{items>MENGE}" />
                         <ObjectIdentifier text="{items>MEINS}" />
+                        <ObjectIdentifier text="{items>CONDAT}" />
+                        <ObjectIdentifier text="{items>LAEDA}" />
                         <Button icon="sap-icon://delete" press="onDeleteItem" type="Reject" />
                     </cells>
                 </ColumnListItem>
             </items>
         </Table>
     </ScrollContainer>
-
 </core:FragmentDefinition>
