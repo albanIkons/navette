@@ -13,9 +13,6 @@
 
             <Label text="{i18n>wipout}" />
             <Input id="recieveWipOutId" showValueHelp="true" valueHelpRequest=".onWipoutHelp" submit="onWipSubmit" />
-
-            <Label text="{i18n>operatore}" />
-            <Input id="recieveOperatoreId" editable="false"/>
         </form:SimpleForm>
 
         <!-- <core:Fragment fragmentName="npmnavette.navette.fragments.statoNavetta" type="XML" /> -->
@@ -147,8 +144,10 @@
                             <ObjectIdentifier text="{items_ric>ARBPL}" />
                             <ObjectIdentifier text="{items_ric>MENGE}" />
                             <ObjectIdentifier text="{items_ric>MEINS}" />
-                            <ObjectIdentifier text="{items_ric>CONDAT}" />
-                            <ObjectIdentifier text="{items_ric>LAEDA}" />
+                            <Text text="{path: 'items>CONDAT', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'} }" />
+                            <!-- <ObjectIdentifier text="{items>CONDAT}" /> -->
+                            <Text text="{path: 'items>LAEDA', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'} }" />
+                            <!-- <ObjectIdentifier text="{items>LAEDA}" /> -->
                             <!-- <Button icon="sap-icon://delete" press="onDeleteItem" type="Reject" /> -->
                         </cells>
                     </ColumnListItem>

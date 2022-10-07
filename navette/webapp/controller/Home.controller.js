@@ -135,6 +135,7 @@ sap.ui.define([
                         oViewModel.setProperty('/busy', false);
                         that.onCloseDialog();
                         oModel.setData(null);
+                        that.getView().byId("recieveOperatoreIdCr").setValue("");
                         if (oNavnum) {//Check if we are updating or creating and show error/success message
                             MessageBox.success("La navetta " + oData.navettatowip.results[0].NAVNUM + " e stata aggiornata");//Sucessful update
                         } else {
@@ -620,7 +621,7 @@ sap.ui.define([
                     this.getView().byId("navetteIdCreate").setValue("");
                     this.getView().byId("recieveWipOutIdCr").setValue("");
                     this.getView().byId("recieveOperatoreIdCr").setValue("");
-                    this.getView().byId("transferOperatoreId").setValue("");
+                    // this.getView().byId("transferOperatoreId").setValue("");
                     this.onClearItemModel();
                 } else if (oKey == "transfer") {
                     this._showFooter(false);
@@ -630,7 +631,7 @@ sap.ui.define([
                     this.getView().byId("navetteIdCreate").setValue("");
                     this.getView().byId("recieveWipOutIdCr").setValue("");
                     this.getView().byId("recieveOperatoreIdCr").setValue("");
-                    this.getView().byId("transferOperatoreId").setValue("");
+                    // this.getView().byId("transferOperatoreId").setValue("");
                     this.onClearItemModel();
                 } else if (oKey == "receive") {
                     this._showFooter(false);
@@ -640,7 +641,7 @@ sap.ui.define([
                     this.getView().byId("navetteIdCreate").setValue("");
                     this.getView().byId("recieveWipOutIdCr").setValue("");
                     this.getView().byId("recieveOperatoreIdCr").setValue("");
-                    this.getView().byId("transferOperatoreId").setValue("");
+                    // this.getView().byId("transferOperatoreId").setValue("");
                     this.onClearItemModel();
                 }
             },

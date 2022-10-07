@@ -111,8 +111,10 @@
                         <ObjectIdentifier text="{items>ARBPL}" />
                         <ObjectIdentifier text="{items>MENGE}" />
                         <ObjectIdentifier text="{items>MEINS}" />
-                        <ObjectIdentifier text="{items>CONDAT}" />
-                        <ObjectIdentifier text="{items>LAEDA}" />
+                        <Text text="{path: 'items>CONDAT', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'} }"/>
+                        <!-- <ObjectIdentifier text="{items>CONDAT}" /> -->
+                        <Text text="{path: 'items>LAEDA', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short'} }"/>
+                        <!-- <ObjectIdentifier text="{items>LAEDA}" /> -->
                         <Button icon="sap-icon://delete" press="onDeleteItem" type="Reject" />
                     </cells>
                 </ColumnListItem>
