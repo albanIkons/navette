@@ -99,7 +99,7 @@ sap.ui.define([
                 const oViewModel = this.getView().getModel("viewModel");
 
                 const requestBody = {//Create the structure fo deep entity
-                    NAVNUM: (oNavnum == "") ? '&&' : oNavnum, //Header
+                    NAVNUM: (oNavnum == "") ? '0000000000' : oNavnum, //Header
                     NAVDAT: sap.ui.getCore().byId("creazione").getDateValue(), //Header
                     OPERATORE: this.getView().byId("recieveOperatoreIdCr").getValue(),
                     navettatowip: [] // Item
@@ -108,7 +108,7 @@ sap.ui.define([
                 //Create the item section for the deep entity call
                 for (var i = 0; i < oItems.length; i++) {
                     const oTempItems = {};
-                    oTempItems.NAVNUM = (oNavnum == "") ? '&&' : oNavnum;
+                    oTempItems.NAVNUM = (oNavnum == "") ? '0000000000' : oNavnum;
                     oTempItems.WIP_OUT = oItems[i].WIP_OUT;
                     oTempItems.AUFNR = oItems[i].AUFNR;
                     oTempItems.LGORT = this.checkFieldSplit(sap.ui.getCore().byId("partenza").getValue());
